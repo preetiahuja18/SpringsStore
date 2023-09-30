@@ -1,3 +1,4 @@
+import 'package:flower_store/UI/productDetail.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -60,41 +61,48 @@ List<String> recommendedProductImages = [
   @override
  Widget build(BuildContext context) {
   return Scaffold(
+    backgroundColor: Colors.white,
     body: Column(
       children: [
        if (showVideo)
-  Stack(
-    alignment: Alignment.center,
-    children: [
-      Container(
-       //color: Colors.red,
-      // height: 89,
-       //height: MediaQuery.of(context).size.height*0.089,
-      //   width:MediaQuery.of(context).size.width,
-        child: AspectRatio(aspectRatio: 32/5,
-          child: VideoPlayer(_controller)),
-      ),
-      Positioned(
-        child: Center(
-          child: Text(
-            "Catalogue",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 22,
-              fontWeight: FontWeight.w500,
+    Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: SingleChildScrollView(
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+           height: MediaQuery.of(context).size.height*0.089,
+          width:MediaQuery.of(context).size.width,
+          margin: EdgeInsets.fromLTRB(05, 25, 5, 8),
+            child: ClipRRect(
+      borderRadius: BorderRadius.circular(15),
+      child: VideoPlayer(_controller),
+      ),),
+          
+          Positioned(
+            child: Center(
+              child: Text(
+                "Catalogue",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       ),
-    ],
-  ),
-
-        SizedBox(height: 5),
+    ),
+    ),
+    
+      //  SizedBox(height: 5),
         if (pageIndex == 0)
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(5.0),
               child: Text(
                 "By Occasion",
                 style: TextStyle(
@@ -106,12 +114,12 @@ List<String> recommendedProductImages = [
           ),
         if (pageIndex == 0) buildImageCarousel(),
         if (pageIndex == 0) buildSearchBar(),
-
+    
         if (pageIndex == 0)
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(5.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -143,7 +151,7 @@ List<String> recommendedProductImages = [
                   padding: EdgeInsets.only(right: 8.0),
                   child: buildProductCard(
                     imagePath,
-
+    
                     'Rose Bouquet',
                     '\$25.99',
                      cardWidth: 135,
@@ -157,7 +165,7 @@ List<String> recommendedProductImages = [
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -192,7 +200,7 @@ List<String> recommendedProductImages = [
                    'Rose Bouquet',
                   '\$25.99',
                   cardWidth: 135,
-                  cardHeight: 160,
+                  cardHeight: 150,
                 ),
               );
             }).toList(),
@@ -289,11 +297,20 @@ Widget buildProductCard(String imagePath, String productName, String productPric
         ),
         child: Stack(
           children: [
-            Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
+            GestureDetector(
+              onTap:(){
+                Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetail(title: '', address: '', deliveryDate: '', shippingCharges:9.9, description: '', includedItems: '', dummyEmail: '', dummyPhone: '', dummyReviews: '',),
+                      ),
+                    );
+              },
+              child: Image.asset(
+                imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              ),
             ),
             Positioned(
               top: 8.0,
@@ -341,7 +358,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
 
  Widget buildSearchBar() {
   return Padding(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.all(8.0),
     child: TextField(
       decoration: InputDecoration(
         hintText: "Search",

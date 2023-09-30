@@ -116,7 +116,7 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(top: 320.0),
+                padding: const EdgeInsets.only(top: 300.0),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -238,7 +238,7 @@ class _SignUpState extends State<SignUp> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 100.0,
+          height: 80.0,
         ),
         Center(
           child: Text(
@@ -281,7 +281,7 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 15),
               TextFormField(
                 obscureText: true,
                 decoration: InputDecoration(
@@ -297,9 +297,9 @@ class _SignUpState extends State<SignUp> {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.only(top: 320.0),
+                padding: const EdgeInsets.only(top: 280.0),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -431,7 +431,7 @@ class __OTPScreenState extends State<_OTPScreen> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 130.0,
+          height: 100.0,
         ),
         AppBar(
           leading: IconButton(
@@ -451,7 +451,7 @@ class __OTPScreenState extends State<_OTPScreen> {
             style: TextStyle(color: Colors.black, fontSize: 30),
           ),
         ),
-        SizedBox(height: 100),
+        SizedBox(height: 90),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
@@ -480,7 +480,7 @@ class __OTPScreenState extends State<_OTPScreen> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(top: 320.0),
+                padding: const EdgeInsets.only(top: 250.0),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
@@ -565,7 +565,7 @@ class _NameDetailsState extends State<NameDetails> {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         SizedBox(
-          height: 420.0,
+          height: 400.0,
         ),
         Align(
           alignment: Alignment.centerLeft,
@@ -587,7 +587,7 @@ class _NameDetailsState extends State<NameDetails> {
             ),
           ),
         ),
-        SizedBox(height: 80),
+        SizedBox(height: 50),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -706,7 +706,7 @@ class _AddressDetailsState extends State<AddressDetails> {
             ),
           ),
         ),
-        SizedBox(height: 80),
+        SizedBox(height: 40),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
@@ -745,7 +745,7 @@ class _AddressDetailsState extends State<AddressDetails> {
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(top: 100.0),
+                padding: const EdgeInsets.only(top: 90.0),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(
