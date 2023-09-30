@@ -1,3 +1,4 @@
+import 'package:flower_store/UI/productDetail.dart';
 import 'package:flower_store/UI/signIn.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
   debugShowCheckedModeBanner: false,
   title: 'Flower Store',
- 
-  home: SplashScreen(),
+ home:SplashScreen(),
+  // home:  ProductDetail(title: '', address: '', deliveryDate: '', shippingCharges:9.9, description: '', includedItems: '', dummyEmail: '', dummyPhone: '', dummyReviews: '',),
 );
 
   }
