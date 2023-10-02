@@ -23,7 +23,7 @@ class ProductDetail extends StatefulWidget {
     required this.includedItems,
     required this.dummyEmail,
     required this.dummyPhone,
-    required this.dummyReviews,
+    required this.dummyReviews, 
   }) : super(key: key);
 
   @override
@@ -179,7 +179,7 @@ void closeDrawer() {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-     drawerEnableOpenDragGesture: false,
+     endDrawerEnableOpenDragGesture:false ,
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
