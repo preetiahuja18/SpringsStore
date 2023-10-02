@@ -35,6 +35,8 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_svg: ^2.0.7
+  flutter_custom_clippers: ^2.1.0
+  dotted_line: 
 
 dev_dependencies:
   flutter_test:
@@ -88,6 +90,9 @@ flutter:
     - assets/images/prod11.png
     - assets/images/prod12.png
     - assets/images/prod13.png
+    - assets/images/background.png
+    - assets/images/picc.png
+    - assets/images/card.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

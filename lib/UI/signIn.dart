@@ -631,7 +631,7 @@ class _NameDetailsState extends State<NameDetails> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SignUp(),
+                    builder: (context) => HomePage(),
                   ));
                 },
                 child: Text(
@@ -768,7 +768,7 @@ class _AddressDetailsState extends State<AddressDetails> {
               GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SignUp(),
+                    builder: (context) => HomePage(),
                   ));
                 },
                 child: Text(

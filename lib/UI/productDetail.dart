@@ -23,7 +23,7 @@ class ProductDetail extends StatefulWidget {
     required this.includedItems,
     required this.dummyEmail,
     required this.dummyPhone,
-    required this.dummyReviews,
+    required this.dummyReviews, 
   }) : super(key: key);
 
   @override
@@ -179,8 +179,11 @@ void closeDrawer() {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
+     endDrawerEnableOpenDragGesture:false ,
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        actions: [Container()],
         elevation: 0,
         backgroundColor: Colors.white,
         leading: Row(
@@ -490,18 +493,21 @@ void closeDrawer() {
             SizedBox(
               height: 100,
               child: DrawerHeader(
-                child: Row(
-                  children: [
-                    Icon(Icons.arrow_back_ios,size:20),
-                    Text(
-                      'How to take care',
-                      style: TextStyle(
-                        color: Color(0xff4E6C50),
-                        
-                        fontSize: 22,
+                child: GestureDetector(
+                  onTap: () => _scaffoldKey.currentState!.closeEndDrawer(),
+                  child: Row(
+                    children: [
+                      Icon(Icons.arrow_back_ios,size:20),
+                      Text(
+                        'How to take care',
+                        style: TextStyle(
+                          color: Color(0xff4E6C50),
+                          
+                          fontSize: 22,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

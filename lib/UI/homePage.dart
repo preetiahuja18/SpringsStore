@@ -1,4 +1,8 @@
+import 'package:flower_store/UI/checkout.dart';
+import 'package:flower_store/UI/occassion.dart';
 import 'package:flower_store/UI/productDetail.dart';
+import 'package:flower_store/UI/profilscreen.dart';
+import 'package:flower_store/UI/searchScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,8 +22,8 @@ class _HomePageState extends State<HomePage> {
   final pages = [
     const Page1(),
     const Page2(),
-    const Page3(),
-    const Page4(),
+    const CheckOutScreen(),
+    const ProfileScreen(),
   ];
 
   late VideoPlayerController _controller;
@@ -64,6 +68,7 @@ List<String> recommendedProductImages = [
     backgroundColor: Colors.white,
     body: Column(
       children: [
+           if (pageIndex == 0)
        if (showVideo)
     Padding(
     padding: const EdgeInsets.all(5.0),
@@ -82,12 +87,17 @@ List<String> recommendedProductImages = [
           
           Positioned(
             child: Center(
-              child: Text(
-                "Catalogue",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w500,
+              child: GestureDetector(
+                onTap :(){Navigator.of(context).push(MaterialPageRoute(
+                       builder: (context) => CatalogueProducts(),
+                  ));} ,
+                child: Text(
+                  "Catalogue",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
@@ -241,40 +251,48 @@ List<String> recommendedProductImages = [
 }
 
   Widget buildImageCard(String title, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Card(
-        elevation: 3.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
+    return GestureDetector(onTap:(){
+       Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OcassionScreen(),
         ),
-        child: Container(
-          width: 90.0,
-          height: 110.0,
-          decoration: BoxDecoration(
+      );
+    },
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: Card(
+          elevation: 3.0,
+          shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
-            color: Colors.white,
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
+          child: Container(
+            width: 90.0,
+            height: 110.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-              SizedBox(height: 5),
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 10,
+                SizedBox(height: 5),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -357,26 +375,35 @@ Widget buildProductCard(String imagePath, String productName, String productPric
 }
 
  Widget buildSearchBar() {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: TextField(
-      decoration: InputDecoration(
-        hintText: "Search",
-        hintStyle: TextStyle(fontSize: 18),
-        prefixIcon: Icon(Icons.tune, size: 24, color: Colors.black),
-        suffixIcon: Icon(Icons.mic, size: 24, color: Colors.black),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(8.0),
+  return GestureDetector(
+    onTap:(){
+      //  Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => SearchScreen(),
+      //   ),
+      // );
+    },
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        decoration: InputDecoration(
+          hintText: "Search",
+          hintStyle: TextStyle(fontSize: 18),
+          prefixIcon: Icon(Icons.tune, size: 24, color: Colors.black),
+          suffixIcon: Icon(Icons.mic, size: 24, color: Colors.black),
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          filled: true,
+          
+          fillColor: Color(0xffF5EBE0), 
+          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        filled: true,
-        
-        fillColor: Color(0xffF5EBE0), 
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       ),
     ),
   );
@@ -620,48 +647,161 @@ Widget LikedProductList(String imagePath, String productName, String productPric
     ),
   );
 }
-
-
-class Page3 extends StatelessWidget {
-  const Page3({Key? key}) : super(key: key);
+class CatalogueProducts extends StatefulWidget {
+  const CatalogueProducts({super.key});
 
   @override
+  State<CatalogueProducts> createState() => _CatalogueProductsState();
+}
+
+class _CatalogueProductsState extends State<CatalogueProducts> {
+    List<String> CatalogueProductImages = [
+    'assets/images/flower1.png',
+    'assets/images/flower2.png',
+    'assets/images/flower3.png',
+    'assets/images/flower4.png',
+    'assets/images/flower5.png',
+    'assets/images/flower6.png',
+    'assets/images/flower7.png',
+    'assets/images/flower8.png',
+    'assets/images/flower9.png',
+    'assets/images/flower10.png',
+  ];
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Text(
-            "Page Number 3",
-            style: TextStyle(
-              color: Colors.red[900],
-              fontSize: 45,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: Colors.black,
+          iconSize: 20,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-      ],
+        title: Text(
+          'Our Catalogue',
+          style: TextStyle(fontSize: 20, color: Colors.black),
+        ),
+      ),
+      body: ListView.builder(
+        itemCount: CatalogueProductImages.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (index.isOdd) {
+            return SizedBox(width: 8,height: 8,); 
+          }
+          if (index + 1 < CatalogueProductImages.length) {
+            
+            return Row(
+              children: [
+                Expanded(
+                  child: LikedProductList(
+                    CatalogueProductImages[index],
+                    'Rose Bouquet',
+                    '\$25.99',
+                    cardWidth: 170,
+                    cardHeight: 202,
+                  ),
+                ),
+                Expanded(
+                  child: LikedProductList(
+                    CatalogueProductImages[index + 1],
+                    'Rose Bouquet',
+                    '\$25.99',
+                    cardWidth: 170,
+                    cardHeight: 202,
+                  ),
+                ),
+              ],
+            );
+          } else {
+            
+            return Center(
+              child: Expanded(
+                child: LikedProductList(
+                  CatalogueProductImages[index],
+                  'Rose Bouquet',
+                  '\$25.99',
+                  cardWidth: 170,
+                    cardHeight: 202,
+                ),
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
-
-class Page4 extends StatelessWidget {
-  const Page4({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Text(
-            "Page Number 4",
-            style: TextStyle(
-              color: Colors.purple[900],
-              fontSize: 45,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+Widget CatalogueProductList(String imagePath, String productName, String productPrice,
+    {double cardWidth = 170, double cardHeight = 202}) {
+  return Padding(
+    padding: EdgeInsets.only(right: 8.0),
+    child: Card(
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Container(
+        width: cardWidth,
+        height: cardHeight,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
         ),
-      ],
-    );
-  }
+        child: Stack(
+          children: [
+            Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Positioned(
+              top: 8.0,
+              right: 8.0,
+              child: Icon(
+                Icons.favorite_outline,
+                color: Colors.white,
+                size:15,
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+               color: Colors.black.withOpacity(0.2),
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      productName,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      productPrice,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
+
+
+
+
