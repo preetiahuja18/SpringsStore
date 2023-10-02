@@ -179,7 +179,6 @@ void closeDrawer() {
 @override
   Widget build(BuildContext context) {
     return Scaffold(
-     drawerEnableOpenDragGesture: false,
       key: _scaffoldKey,
       appBar: AppBar(
         elevation: 0,
@@ -488,20 +487,22 @@ void closeDrawer() {
         child: ListView(
           //padding: EdgeInsets.all(0),
           children: <Widget>[
-            DrawerHeader(
-              
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_ios,size:20),
-                  Text(
-                    'How to take care',
-                    style: TextStyle(
-                      color: Color(0xff4E6C50),
-                      
-                      fontSize: 22,
+            SizedBox(
+              height: 100,
+              child: DrawerHeader(
+                child: Row(
+                  children: [
+                    Icon(Icons.arrow_back_ios,size:20),
+                    Text(
+                      'How to take care',
+                      style: TextStyle(
+                        color: Color(0xff4E6C50),
+                        
+                        fontSize: 22,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             ListTile(
@@ -513,12 +514,14 @@ void closeDrawer() {
              text: '1. Find a Vase-',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
                     fontSize: 17,
                   ),
                 ),
                 TextSpan(
                   text: ' You may have noticed your flowers no longer have roots, and that they\'re not in soil. Bet they\'re thirsty! Time to put them in your favorite vase with some fresh water.',
                   style: TextStyle(
+                    color: Colors.black,
                     fontWeight: FontWeight.normal,
                     fontSize: 17,
                   ),
@@ -541,6 +544,7 @@ void closeDrawer() {
               TextSpan(
              text: '2.Trim Those Stems -',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
@@ -548,6 +552,7 @@ void closeDrawer() {
        TextSpan(
         text: ' - Keep those stems trimmed! Always cut your flowers at an angle so they can absorb more water & won\'t suffocate on the bottom of the vase. After the initial cut, check the bottoms of your stems every couple of days, and if the ends are looking a bit slimy, just snip off an inch or so.',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 17,
         ),
@@ -569,6 +574,7 @@ void closeDrawer() {
                TextSpan(
         text: '3.Remove Leaves',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
@@ -576,6 +582,7 @@ void closeDrawer() {
       TextSpan(
         text: ' - Take off any excess leaves so that all the water is funneled into the petals. Pay special attention to leaves below the water line because they\'ll decompose, causing rot and bacteria to grow, which will shorten the lifespan of your blooms.',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 17,
         ),
@@ -597,6 +604,7 @@ void closeDrawer() {
               TextSpan(
             text: '4.Remove Spent Blooms',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.bold,
           fontSize: 17,
         ),
@@ -604,6 +612,7 @@ void closeDrawer() {
           TextSpan(
         text: ' - Any flowers that are past their prime release ethylene gas which will age the flowers around them. Remove any flowers that are beginning to wilt to keep the rest of your bouquet fresh and happy.',
         style: TextStyle(
+          color: Colors.black,
           fontWeight: FontWeight.normal,
           fontSize: 17,
         ),
