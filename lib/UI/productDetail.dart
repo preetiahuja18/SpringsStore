@@ -1,54 +1,60 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flower_store/UI/productphoto.dart';
+import 'package:flower_store/models/flowerDetails.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductDetail extends StatefulWidget {
-  final String title;
-  final String address;
-  final String deliveryDate;
-  final double shippingCharges;
-  final String description;
-  final String includedItems;
-  final String dummyEmail;
-  final String dummyPhone;
-  final String dummyReviews;
+  final String id;
+ ProductDetail({required this.id });
 
-  ProductDetail({
-    Key? key,
-    required this.title,
-    required this.address,
-    required this.deliveryDate,
-    required this.shippingCharges,
-    required this.description,
-    required this.includedItems,
-    required this.dummyEmail,
-    required this.dummyPhone,
-    required this.dummyReviews, 
-  }) : super(key: key);
-
-  @override
+@override
   State<ProductDetail> createState() => _ProductDetailState();
 }
-
 class _ProductDetailState extends State<ProductDetail> {
-   String dummyTitle = "Circle Bloom";
-  String dummyAddress = "567g, 34 Street, Alogoia, Hermenia";
-  String dummyDeliveryDate = "Wednesday - January 18, 2023";
-  double dummyShippingCharges = 9.99;
-  String dummyDescription = "A vibrant mix of purple, cream and pink blossoms. The feminine color palette is pretty without being overtly sweet, much like the rare and creature it is named after. Add a touch of purple this season with a mix of pink -hued roses and sprigs of aster.";
-  String dummyIncludedItems = "Roses, Aster, and Alstroemeria";
-  String dummyEmail="store16springs@gmail.com";
-  String dummyPhone= '+91 9846524561';
-  String dummyReviews ='4.5';
+    late Future<FlowerDetail> flowerDetailFuture;
+ @override
+  void initState() {
+    super.initState();
+    flowerDetailFuture = fetchFlowerDetails(widget.id);
+  }
+Future<FlowerDetail> fetchFlowerDetails(String id) async {
+  try {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('flowerDetails')
+        .where('id', isEqualTo: '1') 
+        .get();
 
-  List<String> RefProductImages = [
-  'assets/images/flower6.png',
-   'assets/images/flower7.png',
-    'assets/images/flower8.png',
-     'assets/images/flower9.png',
-      'assets/images/flower10.png'
- 
-];
+    if (querySnapshot.docs.isNotEmpty) {
+    
+      DocumentSnapshot document = querySnapshot.docs.first;
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+        print("Flower Detail ID: ${data['id']}");
+      print("Flower Name: ${data['flowerName']}");
+       return FlowerDetail(
+        id: data['id'],
+        flowerName: data['flowerName'],
+        flowerDescription: data['flowerDescription'],
+        flowerImage: data['flowerImage'],
+        flowerPrice: data['flowerPrice'].toDouble(),
+        items: data['items'],
+        review: data['review'],
+        shippingCharges: data['shippingCharges'].toDouble(),
+        deliveryDate: data['deliveryDate'],
+        oldFlowerPrice: data['oldFlowerPrice'],
+      );
+    } else {
+      throw Exception('Flower details not found');
+    }
+  } catch (e) {
+    print('Error fetching flower details: $e');
+    throw e;
+  }
+}
+
+    
+
 void _showLocationChangeModal() {
   TextEditingController addressController = TextEditingController(text: '123 Main St, City, Country');
 
@@ -79,7 +85,8 @@ void _showLocationChangeModal() {
                     color: Colors.black,
                   ),
                   SizedBox(width: 4),
-                  Text('Add Location', style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold)),
+                  Text('Add Location', style: GoogleFonts.laila
+                  (fontSize: 17, fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(height: 10),
@@ -93,8 +100,8 @@ void _showLocationChangeModal() {
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintStyle: TextStyle(color: Colors.black),
+                        labelStyle: GoogleFonts.laila(color: Colors.black),
+                        hintStyle: GoogleFonts.laila(color: Colors.black),
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.black),
                         ),
@@ -129,7 +136,7 @@ void _showLocationChangeModal() {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                    textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0),
                     ),
@@ -151,7 +158,7 @@ void _showLocationChangeModal() {
                     SizedBox(width: 8),
                     Text(
                       'Use my Current Location',
-                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.laila(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -182,6 +189,8 @@ void closeDrawer() {
      endDrawerEnableOpenDragGesture:false ,
       key: _scaffoldKey,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+          actions: [Container()],
         elevation: 0,
         backgroundColor: Colors.white,
         leading: Row(
@@ -204,422 +213,444 @@ void closeDrawer() {
             ),
           ],
         ),
-        title: Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Sending To - ',
-                style: TextStyle(fontSize: 17, color: Colors.black),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    dummyAddress,
-                    style: TextStyle(fontSize: 13, color: Colors.black),
-                  ),
-                  GestureDetector(
-                      onTap: _showLocationChangeModal,
-                    child: Text(
-                      'CHANGE',
-                      style: TextStyle(fontSize: 10, color: Color(0xffAA5656), decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Column(
-                    children: [
-                      GestureDetector(onTap: () {
-                       Navigator.of(context).push(
-                       MaterialPageRoute(
-                       builder: (context) => ProductImageViewer(
-                         imagePaths: RefProductImages, // List of image paths
-                         initialIndex: 0, // Initial index when opening the viewer
-        ),
-      ),
-    );
-  },
-                        child: Container(
-                          width: 263,
-                          height: 263,
-                          child: Image.asset('assets/images/prod1.png', fit: BoxFit.cover),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 15),
-                  Column(
-                    children: [
-                      SizedBox(
-                        width: 71,
-                        height: 71,
-                        child: Image.asset('assets/images/prod11.png'),
-                      ),
-                      SizedBox(height: 25),
-                      SizedBox(
-                        width: 71,
-                        height: 71,
-                        child: Image.asset('assets/images/prod12.png'),
-                      ),
-                      SizedBox(height: 25),
-                      SizedBox(
-                        width: 71,
-                        height: 71,
-                        child: Image.asset('assets/images/prod13.png'),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 10),
-              Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      dummyTitle,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width:5),
-                      Text('Delivery Date -',style: TextStyle(fontSize: 16 ),),SizedBox(width:5),
-                      Text(dummyDeliveryDate,style: TextStyle(fontSize: 13 ),)
-                    ],
-                  ),
-                  SizedBox(height: 5,),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.local_shipping_outlined,
-                        size: 20,
-                        color: Colors.black,
-                      ),
-                      SizedBox(width:5),
-                      Text('Shipping Charges -',style: TextStyle(fontSize: 16 ),),SizedBox(width:12),
-                      Text('\$${dummyShippingCharges.toStringAsFixed(2)}',style: TextStyle(fontSize: 13 ),)
-                    ],
-                  ),
-                  SizedBox(height:10),
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Description',style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),),
-                      GestureDetector(
-                      onTap: () {
-                     _scaffoldKey.currentState!.openEndDrawer(); 
-                      },
-                        child: Text('How to take Care?',style: TextStyle(fontSize: 13,decoration: TextDecoration.underline,
-                          color: Color(0xffAA5656),fontWeight: FontWeight.bold),),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 8,),
-      
-                  Text(dummyDescription,
-                    style: TextStyle(fontSize: 16,),),
-      
-                  SizedBox(height: 8,),
-                  Align(alignment: Alignment.centerLeft,
-                    child: Text(
-                      'What’s included?',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  SizedBox(height: 5,),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      dummyIncludedItems,style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
-                
-      
-              ),
-              SizedBox(height: 10,),
-       ElevatedButton(
-        
-  onPressed: () {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Added to Bag'),
-        duration: Duration(seconds: 2),
-        behavior: SnackBarBehavior.floating, 
-      ),
-    );
-    setState(() {
-      isAddedToBag = true;
-    });
-  },
-  style: ElevatedButton.styleFrom(
-    primary: Color(0xFFAA8B56),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(10),
-    ),
-    minimumSize: Size(350, 70),
-  ),
-  child: isAddedToBag
-      ? CustomButtonSecond()
-      : CustomButtonContent(),
-),
-
-        SizedBox(height: 10,),
-        Text('Contact',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-        SizedBox(height: 5,),
-        Row(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Email : ',style: TextStyle(fontSize: 16,decoration: TextDecoration.underline,color: Colors.black),),
-            SizedBox(width: 5,),
             Text(
-                      dummyEmail,style: TextStyle(fontSize: 16),
-                    ),
-          ],
-        ),
-        SizedBox(height: 8,),
-         Row(
-          children: [
-            Text('Phone : ',style: TextStyle(fontSize: 16,decoration: TextDecoration.underline,color: Colors.black),),
-            SizedBox(width: 5,),
-            Text(
-                dummyPhone,style: TextStyle(fontSize: 16),
-                    ),
-          ],
-        ),
-        SizedBox(height: 10,),
-        Text('Reviews',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-        SizedBox(height: 5,),
-           Row(
-         children: [
-            Icon(
-             Icons.star,
-        color: Colors.orange,
-        size: 16,
-          ),
-          SizedBox(width: 5),
-        Text(
-         dummyReviews,
-        style: TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-      SizedBox(width: 15),
-    Row(
-      children: [
-        Icon(
-          Icons.star_border,
-          color: Colors.black87,
-          size: 36,
-        ),
-        SizedBox(width: 8,),
-         Icon(
-          Icons.star_border,
-          color: Colors.black87,
-          size: 36,
-        ),
-         SizedBox(width: 8,),
-         Icon(
-          Icons.star_border,
-          color: Colors.black87,
-          size: 36,
-        ),
-         SizedBox(width: 8,),
-         Icon(
-          Icons.star_border,
-          color: Colors.black87,
-          size: 36,
-        ),
-         SizedBox(width: 8,),
-         Icon(
-          Icons.star_border,
-          color: Colors.black87,
-          size: 36,
-        ),
-      ],
-    ),
-
-    SizedBox(height: 8,),
-    Text('Rate our product',style: TextStyle(fontSize: 16),),
-     SizedBox(height: 15,),
-    Text('You may also Like',style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
-    SizedBox(height: 8),
-     SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: RefProductImages.map((imagePath) {
-              return Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: buildRefCard(
-                  imagePath,
-                   'Rose Bouquet',
-                  '\$25.99',
-                  cardWidth: 135,
-                  cardHeight: 160,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-
-            ],
-            
-          ),
-        ),
-      ),
-       endDrawer: Drawer(
-        child: ListView(
-          //padding: EdgeInsets.all(0),
-          children: <Widget>[
-            DrawerHeader(
-              
-              child: Row(
-                children: [
-                  Icon(Icons.arrow_back_ios,size:20),
-                  Text(
-                    'How to take care',
-                    style: TextStyle(
-                      color: Color(0xff4E6C50),
-                      
-                      fontSize: 22,
-                    ),
-                  ),
-                ],
-              ),
+              'Sending To - ',
+              style: GoogleFonts.laila(fontSize: 17, color: Colors.black),
             ),
-            ListTile(
-              title: RichText(
-              text: TextSpan(
-            
-              children: <TextSpan>[
-              TextSpan(
-             text: '1. Find a Vase-',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-                TextSpan(
-                  text: ' You may have noticed your flowers no longer have roots, and that they\'re not in soil. Bet they\'re thirsty! Time to put them in your favorite vase with some fresh water.',
-                  style: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 17,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Text(
+                //   //dummyAddress,
+                //   style: GoogleFonts.laila(fontSize: 13, color: Colors.black),
+                // ),
+                GestureDetector(
+                    onTap: _showLocationChangeModal,
+                  child: Text(
+                    'CHANGE',
+                    style: GoogleFonts.laila(fontSize: 10, color: Color(0xffAA5656), decoration: TextDecoration.underline),
                   ),
                 ),
               ],
-            ),
-            ),
-            
-              onTap: () {
-               
-                closeDrawer(); 
-              },
-            ),
-            SizedBox(height:10),
-              ListTile(
-              title: RichText(
-              text: TextSpan(
-            
-              children: <TextSpan>[
-              TextSpan(
-             text: '2.Trim Those Stems -',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
-      ),
-       TextSpan(
-        text: ' - Keep those stems trimmed! Always cut your flowers at an angle so they can absorb more water & won\'t suffocate on the bottom of the vase. After the initial cut, check the bottoms of your stems every couple of days, and if the ends are looking a bit slimy, just snip off an inch or so.',
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 17,
-        ),
-      ),
-    ],
-  ),
-),
-
-              onTap: () {
-               
-                closeDrawer(); 
-              },
-            ),  SizedBox(height:10),
-              ListTile(
-              title: RichText(
-              text: TextSpan(
-            
-              children: <TextSpan>[
-               TextSpan(
-        text: '3.Remove Leaves',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
-      ),
-      TextSpan(
-        text: ' - Take off any excess leaves so that all the water is funneled into the petals. Pay special attention to leaves below the water line because they\'ll decompose, causing rot and bacteria to grow, which will shorten the lifespan of your blooms.',
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 17,
-        ),
-      ),
-    ],
-  ),
-),
-
-              onTap: () {
-               
-                closeDrawer(); 
-              },
-            ),  SizedBox(height:10),
-              ListTile(
-              title: RichText(
-              text: TextSpan(
-            
-              children: <TextSpan>[
-              TextSpan(
-            text: '4.Remove Spent Blooms',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 17,
-        ),
-      ),
-          TextSpan(
-        text: ' - Any flowers that are past their prime release ethylene gas which will age the flowers around them. Remove any flowers that are beginning to wilt to keep the rest of your bouquet fresh and happy.',
-        style: TextStyle(
-          fontWeight: FontWeight.normal,
-          fontSize: 17,
-        ),
-      ),
-    ],
-  ),
-),
-
-              onTap: () {
-               
-                closeDrawer(); 
-              },
-            ),
-           
-         
+            )
           ],
+        ),
+      ),
+      body: FutureBuilder<FlowerDetail?>(
+        future: flowerDetailFuture,
+        builder: (context, snapshot){
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator()); 
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (snapshot.data == null)  {
+            return Text('Flower details not found.');
+          } else {
+            final flowerDetail = snapshot.data as FlowerDetail;
+        
+          
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        GestureDetector(onTap: () {
+        //                  Navigator.of(context).push(
+        //                  MaterialPageRoute(
+        //                  builder: (context) => ProductImageViewer(
+        //                    imagePaths: flowerDetail.flowerImage, // List of image paths
+        //                    initialIndex: 0, 
+        //   ),
+        // ),
+        //   );
+        },
+                          child: Container(
+                            width: 263,
+                            height: 263,
+                            child: Image.asset('assets/images/prod1.png', fit: BoxFit.cover),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(width: 15),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: 71,
+                          height: 71,
+                          child: Image.asset('assets/images/prod11.png'),
+                        ),
+                        SizedBox(height: 25),
+                        SizedBox(
+                          width: 71,
+                          height: 71,
+                          child: Image.asset('assets/images/prod12.png'),
+                        ),
+                        SizedBox(height: 25),
+                        SizedBox(
+                          width: 71,
+                          height: 71,
+                          child: Image.asset('assets/images/prod13.png'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        flowerDetail.flowerName,
+                        style: GoogleFonts.laila(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width:5),
+                        Text('Delivery Date -',style: GoogleFonts.laila(fontSize: 16 ),),SizedBox(width:5),
+                        Text(flowerDetail.deliveryDate,style: GoogleFonts.laila(fontSize: 13 ),)
+                      ],
+                    ),
+                    SizedBox(height: 5,),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.local_shipping_outlined,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+                        SizedBox(width:5),
+                        Text('Shipping Charges -',style: GoogleFonts.laila(fontSize: 16 ),),SizedBox(width:12),
+                        Text('\$${flowerDetail.shippingCharges}',style: GoogleFonts.laila(fontSize: 13 ),)
+                      ],
+                    ),
+                    SizedBox(height:10),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Description',style: GoogleFonts.laila(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),),
+                        GestureDetector(
+                        onTap: () {
+                       _scaffoldKey.currentState!.openEndDrawer(); 
+                        },
+                          child: Text('How to take Care?',style: GoogleFonts.laila(fontSize: 13,decoration: TextDecoration.underline,
+                            color: Color(0xffAA5656),fontWeight: FontWeight.bold),),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 8,),
+        
+                    Text(flowerDetail.flowerDescription,
+                      style: GoogleFonts.laila(fontSize: 16,),),
+        
+                    SizedBox(height: 8,),
+                    Align(alignment: Alignment.centerLeft,
+                      child: Text(
+                        'What’s included?',style: GoogleFonts.laila(fontSize: 17,fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        flowerDetail.items,style: GoogleFonts.laila(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                  
+        
+                ),
+                SizedBox(height: 10,),
+         ElevatedButton(
+          
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Added to Bag'),
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating, 
+        ),
+          );
+          setState(() {
+        isAddedToBag = true;
+          });
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Color(0xFFAA8B56),
+          shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+          ),
+          minimumSize: Size(350, 70),
+        ),
+        child: isAddedToBag
+        ? CustomButtonSecond()
+        : CustomButtonContent(),
+      ),
+      
+          SizedBox(height: 10,),
+          Text('Contact',style: GoogleFonts.laila(fontSize: 17,fontWeight: FontWeight.bold),),
+          SizedBox(height: 5,),
+          Row(
+            children: [
+              Text('Email : ',style: GoogleFonts.laila(fontSize: 16,decoration: TextDecoration.underline,color: Colors.black),),
+              SizedBox(width: 5,),
+              Text(
+                        "store16springs@gmail.com",style: GoogleFonts.laila(fontSize: 16),
+                      ),
+            ],
+          ),
+          SizedBox(height: 8,),
+           Row(
+            children: [
+              Text('Phone : ',style: GoogleFonts.laila(fontSize: 16,decoration: TextDecoration.underline,color: Colors.black),),
+              SizedBox(width: 5,),
+              Text(
+                  "+91 9842524612",style: GoogleFonts.laila(fontSize: 16),
+                      ),
+            ],
+          ),
+          SizedBox(height: 10,),
+          Text('Reviews',style: GoogleFonts.laila(fontSize: 17,fontWeight: FontWeight.bold),),
+          SizedBox(height: 5,),
+             Row(
+           children: [
+              Icon(
+               Icons.star,
+          color: Colors.orange,
+          size: 16,
+            ),
+            SizedBox(width: 5),
+          Text(
+           flowerDetail.review as String,
+          style: GoogleFonts.laila(fontSize: 16),
+            ),
+          ],
+        ),
+        SizedBox(width: 15),
+          Row(
+        children: [
+          Icon(
+            Icons.star_border,
+            color: Colors.black87,
+            size: 36,
+          ),
+          SizedBox(width: 8,),
+           Icon(
+            Icons.star_border,
+            color: Colors.black87,
+            size: 36,
+          ),
+           SizedBox(width: 8,),
+           Icon(
+            Icons.star_border,
+            color: Colors.black87,
+            size: 36,
+          ),
+           SizedBox(width: 8,),
+           Icon(
+            Icons.star_border,
+            color: Colors.black87,
+            size: 36,
+          ),
+           SizedBox(width: 8,),
+           Icon(
+            Icons.star_border,
+            color: Colors.black87,
+            size: 36,
+          ),
+        ],
+          ),
+      
+          SizedBox(height: 8,),
+          Text('Rate our product',style: GoogleFonts.laila(fontSize: 16),),
+           SizedBox(height: 15,),
+          Text('You may also Like',style: GoogleFonts.laila(fontSize: 17,fontWeight: FontWeight.bold),),
+          // SizedBox(height: 8),
+          //  SingleChildScrollView(
+          //   scrollDirection: Axis.horizontal,
+          //   child: Row(
+          //     children: RefProductImages.map((imagePath) {
+          //       return Padding(
+          //         padding: EdgeInsets.only(right: 8.0),
+          //         child: buildRefCard(
+          //           imagePath,
+          //            'Rose Bouquet',
+          //           '\$25.99',
+          //           cardWidth: 135,
+          //           cardHeight: 160,
+          //         ),
+          //       );
+          //     }).toList(),
+          //   ),
+          // ),
+      
+              ],
+              
+            ),
+          ),
+              );}}
+      ),
+  
+       endDrawer: Drawer(
+        child: Container(
+          child: ListView(
+            //padding: EdgeInsets.all(0),
+            children: <Widget>[
+              SizedBox(height:100,
+                child: DrawerHeader(
+                  
+                  child: GestureDetector(
+                     onTap: () => _scaffoldKey.currentState!.closeEndDrawer(), 
+                    child: Row(
+                      children: [
+                        Icon(Icons.arrow_back_ios,size:20),
+                        Text(
+                          'How to take care',
+                          style: GoogleFonts.laila(
+                            color: Color(0xff4E6C50),
+                            
+                            fontSize: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              ListTile(
+                title: RichText(
+                text: TextSpan(
+              
+                children: <TextSpan>[
+                TextSpan(
+               text: '1. Find a Vase-',
+                    style: GoogleFonts.laila(
+                      fontWeight: FontWeight.bold,
+                      color:Colors.black,
+                      fontSize: 17,
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' You may have noticed your flowers no longer have roots, and that they\'re not in soil. Bet they\'re thirsty! Time to put them in your favorite vase with some fresh water.',
+                    style: GoogleFonts.laila(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 17,
+                      color:Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              ),
+              
+                onTap: () {
+                 
+                  closeDrawer(); 
+                },
+              ),
+              SizedBox(height:10),
+                ListTile(
+                title: RichText(
+                text: TextSpan(
+              
+                children: <TextSpan>[
+                TextSpan(
+               text: '2.Trim Those Stems -',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.bold,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+               TextSpan(
+          text: ' - Keep those stems trimmed! Always cut your flowers at an angle so they can absorb more water & won\'t suffocate on the bottom of the vase. After the initial cut, check the bottoms of your stems every couple of days, and if the ends are looking a bit slimy, just snip off an inch or so.',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.normal,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+            ],
+          ),
+        ),
+        
+                onTap: () {
+                 
+                  closeDrawer(); 
+                },
+              ),  SizedBox(height:10),
+                ListTile(
+                title: RichText(
+                text: TextSpan(
+              
+                children: <TextSpan>[
+                 TextSpan(
+          text: '3.Remove Leaves',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.bold,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+              TextSpan(
+          text: ' - Take off any excess leaves so that all the water is funneled into the petals. Pay special attention to leaves below the water line because they\'ll decompose, causing rot and bacteria to grow, which will shorten the lifespan of your blooms.',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.normal,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+            ],
+          ),
+        ),
+        
+                onTap: () {
+                 
+                  closeDrawer(); 
+                },
+              ),  SizedBox(height:10),
+                ListTile(
+                title: RichText(
+                text: TextSpan(
+              
+                children: <TextSpan>[
+                TextSpan(
+              text: '4.Remove Spent Blooms',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.bold,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+            TextSpan(
+          text: ' - Any flowers that are past their prime release ethylene gas which will age the flowers around them. Remove any flowers that are beginning to wilt to keep the rest of your bouquet fresh and happy.',
+          style: GoogleFonts.laila(
+            fontWeight: FontWeight.normal,color:Colors.black,
+            fontSize: 17,
+          ),
+              ),
+            ],
+          ),
+        ),
+        
+                onTap: () {
+                 
+                  closeDrawer(); 
+                },
+              ),
+             
+           
+            ],
+          ),
         ),
       ),
     
@@ -634,7 +665,7 @@ class CustomButtonSecond extends StatelessWidget {
       children: [
         Text(
           '\$ 210',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             fontSize: 16,
             decoration: TextDecoration.lineThrough,
             color: Colors.white,
@@ -643,7 +674,7 @@ class CustomButtonSecond extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           '\$ 199',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -663,7 +694,7 @@ class CustomButtonSecond extends StatelessWidget {
         SizedBox(width: 5),
         Text(
           'Added to Bag',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             color: Colors.white,
           //  fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -722,14 +753,14 @@ Widget buildRefCard(String imagePath, String productName, String productPrice,
                   children: [
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       productPrice,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
@@ -753,7 +784,7 @@ class CustomButtonContent extends StatelessWidget {
       children: [
         Text(
           '\$ 210',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             fontSize: 16,
             decoration: TextDecoration.lineThrough,
             color: Colors.white,
@@ -762,7 +793,7 @@ class CustomButtonContent extends StatelessWidget {
         SizedBox(width: 8),
         Text(
           '\$ 199',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             fontSize: 22,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -782,7 +813,7 @@ class CustomButtonContent extends StatelessWidget {
         SizedBox(width: 5),
         Text(
           'Add to Bag',
-          style: TextStyle(
+          style: GoogleFonts.laila(
             color: Colors.white,
           //  fontWeight: FontWeight.bold,
             fontSize: 20,

@@ -1,16 +1,17 @@
+import 'package:flower_store/UI/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+class BestSelling extends StatefulWidget {
+  const BestSelling({Key? key}) : super(key: key);
 
   @override
-  State<SearchScreen> createState() => _SearchScreenState();
+  State<BestSelling> createState() => _BestSellingState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  List<String> SearchProductImages = [
-     'assets/images/flower1.png',
+class _BestSellingState extends State<BestSelling> {
+  List<String> BestSellingImages = [
+    'assets/images/flower1.png',
     'assets/images/flower2.png',
     'assets/images/flower3.png',
     'assets/images/flower4.png',
@@ -22,16 +23,9 @@ class _SearchScreenState extends State<SearchScreen> {
     'assets/images/flower10.png',
   ];
 
-  int selectedButtonIndex = 0;
+  
 
-  // List of different texts for the containers
-  List<String> containerTexts = [
-    'Sort By - Low to High',
-    'Price -> \$200',
-    'Colour- Pink',
-    'Delivery within -2 days',
-    'Occasion -Birthday'
-  ];
+ 
 
   @override
   Widget build(BuildContext context) {
@@ -47,55 +41,37 @@ class _SearchScreenState extends State<SearchScreen> {
             Navigator.of(context).pop();
           },
         ),
-        title: buildSearchBar(context),
+        title: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: 'Best Selling Products',
+                style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
+              ),
+              
+            ],
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.favorite_border),
+            color: Colors.black,
+            onPressed: () {
+               Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => Page2(), 
+        ),
+      );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
-          Container(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: containerTexts.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 180,
-                  height: 40,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: Color(0xFF4E6C50),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          // Add your cross icon functionality here
-                        },
-                        child: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Text(
-                        containerTexts[index],
-                        style: GoogleFonts.laila(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-
+          
           Expanded(
             child: ListView.builder(
-              itemCount: SearchProductImages.length,
+              itemCount: BestSellingImages.length,
               itemBuilder: (BuildContext context, int index) {
                 if (index.isOdd) {
                   return SizedBox(
@@ -103,12 +79,12 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: 8,
                   );
                 }
-                if (index + 1 < SearchProductImages.length) {
+                if (index + 1 < BestSellingImages.length) {
                   return Row(
                     children: [
                       Expanded(
-                        child: SearchProductList(
-                          SearchProductImages[index],
+                        child: BestSellingList(
+                          BestSellingImages[index],
                           'Rose Bouquet',
                           '\$25.99',
                           cardWidth: 170,
@@ -116,8 +92,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ),
                       Expanded(
-                        child: SearchProductList(
-                          SearchProductImages[index + 1],
+                        child: BestSellingList(
+                          BestSellingImages[index + 1],
                           'Rose Bouquet',
                           '\$25.99',
                           cardWidth: 170,
@@ -129,8 +105,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 } else {
                   return Center(
                     child: Expanded(
-                      child: SearchProductList(
-                        SearchProductImages[index],
+                      child: BestSellingList(
+                        BestSellingImages[index],
                         'Rose Bouquet',
                         '\$25.99',
                         cardWidth: 170,
@@ -148,8 +124,7 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 }
 
-
-Widget SearchProductList(String imagePath, String productName, String productPrice,
+Widget BestSellingList(String imagePath, String productName, String productPrice,
     {double cardWidth = 170, double cardHeight = 202}) {
   return Padding(
     padding: EdgeInsets.only(right: 8.0),
@@ -215,41 +190,3 @@ Widget SearchProductList(String imagePath, String productName, String productPri
     ),
   );
 }
-
-Widget buildSearchBar(BuildContext context) {
-  return Container(
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(8.0),
-      color: Color(0xffF5EBE0),
-    ),
-    child: Row(
-      children: [
-        GestureDetector(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.tune, size: 24, color: Colors.black),
-          ),
-        ),
-        Expanded(
-          child: GestureDetector(onTap: () {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SearchScreen(),
-      ),
-    );
-  },
-            child: Text(
-              "Search",
-              style: GoogleFonts.laila(fontSize: 18,color: Colors.black),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(Icons.mic, size: 24, color: Colors.black),
-        ),
-      ],
-    ),
-  );
-}
-

@@ -1,5 +1,6 @@
 import 'package:flower_store/UI/homePage.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OcassionScreen extends StatefulWidget {
   const OcassionScreen({Key? key}) : super(key: key);
@@ -52,11 +53,11 @@ class _OcassionScreenState extends State<OcassionScreen> {
             children: [
               TextSpan(
                 text: 'By Occasion - ',
-                style: TextStyle(fontSize: 20, color: Colors.black),
+                style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
               ),
               TextSpan(
                 text: occasionButtons[selectedButtonIndex],
-                style: TextStyle(
+                style: GoogleFonts.laila(
                   fontSize: 20,
                   color: Color(0xFFAA8B56),
                 ),
@@ -105,7 +106,7 @@ class _OcassionScreenState extends State<OcassionScreen> {
                     ),
                     child: Text(
                       occasionButtons[index],
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: selectedButtonIndex == index
                             ? Colors.white
                             : Colors.black,
@@ -215,14 +216,14 @@ Widget OcassionProductList(String imagePath, String productName, String productP
                   children: [
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       productPrice,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),

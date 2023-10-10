@@ -37,6 +37,13 @@ dependencies:
   flutter_svg: ^2.0.7
   flutter_custom_clippers: ^2.1.0
   dotted_line: 
+  firebase_core: ^2.17.0
+  google_fonts: ^6.1.0
+  firebase_auth: ^4.10.1
+  cloud_firestore: ^4.9.3
+  firebase_storage: ^11.2.8
+  fluttertoast: ^8.2.2
+  cached_network_image: ^3.3.0
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +100,9 @@ flutter:
     - assets/images/background.png
     - assets/images/picc.png
     - assets/images/card.png
+    - assets/images/end.png
+    - assets/images/sign.png
+    - assets/images/catalogue.jpg
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
