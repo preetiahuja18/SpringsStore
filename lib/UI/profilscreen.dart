@@ -1,6 +1,8 @@
 
 
+import 'package:flower_store/UI/signIn.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -16,545 +18,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
       
       body: Stack(
         children: [
-         Column(
-           crossAxisAlignment: CrossAxisAlignment.start,
-          // mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-             Opacity(
-               opacity: 0.5,
-               child: Image.asset(
-                 'assets/images/background.png',
-                 fit: BoxFit.cover,
-               ),
-             ),
-           ],
-         ),
-  Positioned(
-           top: 10.0,
-           left: 16.0,
-          // bottom: 10.0,
-           
-           child: Container(
-             padding: EdgeInsets.only(right:16.0),
-             width: 34.0,
-             height: 34.0,
-             decoration: BoxDecoration(
-               shape: BoxShape.rectangle,
-               color: Colors.white,
-             ),
-             child: Positioned( top: 55.0,
-           left: 25.0,
-               child: IconButton(
-                 icon: Icon(
-                   Icons.logout,
-                   size: 24,
-                   color: Colors.black,
-                 ),
-                 onPressed: () {
-                      showModalBottomSheet(context:context,builder:(context){
-                       return Container(
-                           decoration: BoxDecoration( borderRadius:BorderRadius.vertical(top: Radius.circular(70)),),
-                   padding: EdgeInsets.all(20.0),
-                   height: MediaQuery.of(context).size.height * 0.3,
-                  child: ClipRRect(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(70)),
-               child: Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                   Align(
-                     alignment: Alignment.center,
-                     child: Icon(Icons.keyboard_arrow_down, size: 30),
-                   ),
-                   SizedBox(height: 20),
-                  Center(child: Text('Do you really want to log-out?',style:TextStyle(fontSize:16,color:Colors.black))),
-                  SizedBox(height:30),
-                   Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
-                               children: [
-                                 Container(
-                                   margin: EdgeInsets.only(right: 16.0),
-                                   
-                                   //width: 174,
-                                   child:ElevatedButton(
-                                   onPressed: () {
-                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
-                           builder: (context) => ProfileScreen(),
-                         ),
-                       );
-                     },
-                     style: ElevatedButton.styleFrom(
-                       primary: Colors.white,
-                       textStyle: TextStyle(fontSize: 20, color: Colors.black),
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(0),
-                           side: BorderSide(color: Colors.black),
-                       ),
-                       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                     ),
-                     child: Text("No",style:TextStyle(color: Colors.black)),
-                   ),
-                                 ),
-                                 Container(
-                                     margin: EdgeInsets.only(left: 16.0),
-                                   // height: 48,
-                                   // width: 174,
-                                   child: ElevatedButton(
-                                   onPressed: () {
-                                 Navigator.of(context).push(
-                                  MaterialPageRoute(
-                           builder: (context) => ProfileScreen(),
-                         ),
-                       );
-                     },
-                     style: ElevatedButton.styleFrom(
-                       primary: Colors.black,
-                       textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(0),
-                       ),
-                       padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                     ),
-                     child: Text("Yes"),
-                   ),
-                                 ),
-                               ],
-                             ),
-                ],
-               ),
-             ),
-           );
-                      });
-                   
-                 },
-               ),
-             ),
-           ),
-         ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 1.3,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50.0),
-                  topRight: Radius.circular(50.0),
-                ),
-                color: Colors.white,
-              ),
-              child: Stack(
-                alignment: Alignment.topCenter, 
-                children: [
-                  
-                // SizedBox(height:50),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 146.0, left: 25.0,right:25.0 ),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                         Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.person_2_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                                              ),
-                          ),
-                         Expanded(
-                                 child: ListTile(
-                       title: Text('Personal Information',style: TextStyle(fontSize: 17,color: Colors.black),),
-                                  trailing: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                             Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => EditPage(),
-                      ),
-                    );
-                            },
-                          ),),
-                     
-                            ),
-                            ],
-                            ),
-                              Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.shopping_bag_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('Orders',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing:  IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                             Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => OrdersPage(),
-                      ),
-                    );
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.settings_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('App Settings',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                      //        Navigator.of(context).push(
-                      // MaterialPageRoute(
-                      //   builder: (context) => OrdersPage(),
-                     // ),
-                   // );
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.translate_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('Change Language',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                             Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => LanguagePage(),
-                      ),
-                    );
-                          
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.account_balance_outlined ,
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('Wallet',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                    //          Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OrdersPage(),
-                    //   ),
-                    // );
-                            },
-                          ),
-                      ),
-                            ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.live_help_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('FAQs',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing: IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                    //          Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OrdersPage(),
-                    //   ),
-                    // );
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                        Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.phone_outlined, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('Need help? Contact Us',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing:IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                    //          Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OrdersPage(),
-                    //   ),
-                    // );
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                     Opacity(
-                      opacity: 0.1, // 10% opacity
-                                     child: Divider(
-                                      color: Colors.black,
-                      thickness: 1.0,
-                      ),
-                       ),
-                          Row(
-                         children: [
-                            Padding(
-                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
-                             child: Icon(
-                           Icons.info_outline, 
-                           color: Colors.black, 
-                          size: 24.0, 
-                       ),
-                          ),
-                      Expanded(
-                      child: ListTile(
-                       title: Text('About Us',style: TextStyle(fontSize: 17,color: Colors.black),),
-                       trailing:IconButton(
-                            icon: Icon(
-                              Icons.arrow_forward_ios,size: 20,
-                              color: Colors.black, 
-                            ),
-                            onPressed: () {
-                    //          Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (context) => OrdersPage(),
-                    //   ),
-                    // );
-                            },
-                          ),
-                      ),
-                                       ),
-                                       ],
-                                    ),
-                                    
-                                    
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+         Stack(
+  children: [
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+     // mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Opacity(
+          opacity: 0.5,
+          child: Image.asset(
+            'assets/images/background.png',
+            fit: BoxFit.cover,
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Stack(
-              children:[
-                Positioned(
-                  top:MediaQuery.of(context).size.height*0.098,
-                  left:MediaQuery.of(context).size.width*0.130,
-                  right:MediaQuery.of(context).size.width*0.130,
-                  child: Column(
-                    children: [
-                      Container(
-                      width: 100, 
-                      height: 100,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-      BoxShadow(
-        color: Colors.grey.withOpacity(0.5),
-        spreadRadius: 5,
-        blurRadius: 7,
-        offset: Offset(0, 3),
-      ),
-    ],
-                        
-                        //color: Colors.red,
-                      ),
-                      child: ClipOval(
-
-                        child: Image.asset(
-                          'assets/images/picc.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                      Text(
-                      'Shynaa sharma',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  
-                  ],) )
-               
-          
-              ]
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-class EditPage extends StatefulWidget {
-  const EditPage({super.key});
-
-  @override
-  State<EditPage> createState() => _EditPageState();
-}
-
-class _EditPageState extends State<EditPage> {
-  TextEditingController nameController = TextEditingController(text: 'Shynaa Sharma');
-  TextEditingController PhoneController = TextEditingController(text: '+1-202-555-0178');
-  TextEditingController emailController = TextEditingController(text: 'shynasharma@gmail.com');
-  TextEditingController primaryAddressController = TextEditingController(text: '567g, 34 Street, Alogoia, Hermenia, US');
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+        ),
+      ],
+    ),
+  Positioned(
+      top: 10.0,
+      left: 16.0,
+     // bottom: 10.0,
       
-      body: Stack(
-        children: [
-          Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Opacity(
-                    opacity: 0.5,
-                    child: Image.asset(
-                      'assets/images/background.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ],
-              ),
-              Positioned(
-                top: 10.0,
-                left: 16.0,
-                child: Container(
-                  padding: EdgeInsets.only(right: 16.0),
-                  width: 34.0,
-                  height: 34.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                  ),
-                  child: Positioned(
-                    top: 55.0,
-                    left: 25.0,
-                    child: IconButton(
+      child: Container(
+        padding: EdgeInsets.only(right:16.0),
+        width: 34.0,
+        height: 34.0,
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          color: Colors.white,
+        ),
+        child: Positioned( top: 55.0,
+      left: 25.0,
+          child: IconButton(
             icon: Icon(
               Icons.logout,
               size: 24,
@@ -630,13 +124,522 @@ class _EditPageState extends State<EditPage> {
                             ),
                           ],
                         ),
+           ],
+          ),
+        ),
+      );
+                 });
+              
+            },
+          ),
+        ),
+      ),
+    ),
+  ],
+),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height / 1.3,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                ),
+                color: Colors.white,
+              ),
+              child: Stack(
+                alignment: Alignment.topCenter, 
+                children: [
+                  Positioned(
+                    top: -10,
+                    child: Container(
+                      width: 100, 
+                      height: 100, 
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        //color: Colors.red,
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          'assets/images/picc.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 90, 
+                    child: Text(
+                      'Shynaa sharma',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                // SizedBox(height:50),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 146.0, left: 25.0,right:25.0 ),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         GestureDetector(
+                          onTap:(){         Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => EditPage(),
+                      ),
+                    );},
+                           child: Row(
+                           children: [
+                              Padding(
+                               padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                               child: Icon(
+                             Icons.person_2_outlined, 
+                             color: Colors.black, 
+                            size: 24.0, 
+                                                ),
+                            ),
+                           Expanded(
+                             child: ListTile(
+                                          title: Text('Personal Information',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.arrow_forward_ios,size: 20,
+                                  color: Colors.black, 
+                                ),
+                                onPressed: () {
+                                 Navigator.of(context).push(
+                                         MaterialPageRoute(
+                                           builder: (context) => EditPage(),
+                                         ),
+                                       );
+                                },
+                              ),),
+                           ),
+                              ],
+                              ),
+                         ),
+                              Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        GestureDetector(
+                          onTap:(){ Navigator.of(context).push(
+                                              MaterialPageRoute(
+                          builder: (context) => OrdersPage(),
+                                              ),
+                                            );},
+                          child: Row(
+                           children: [
+                              Padding(
+                               padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                               child: Icon(
+                             Icons.shopping_bag_outlined, 
+                             color: Colors.black, 
+                            size: 24.0, 
+                                               ),
+                            ),
+                                              Expanded(
+                                              child: ListTile(
+                                               title: Text('Orders',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                                               trailing:  IconButton(
+                              icon: Icon(
+                                Icons.arrow_forward_ios,size: 20,
+                                color: Colors.black, 
+                              ),
+                              onPressed: () {
+                               Navigator.of(context).push(
+                                              MaterialPageRoute(
+                          builder: (context) => OrdersPage(),
+                                              ),
+                                            );
+                              },
+                            ),
+                                              ),
+                                         ),
+                                         ],
+                                      ),
+                        ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        Row(
+                         children: [
+                            Padding(
+                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                             child: Icon(
+                           Icons.settings_outlined, 
+                           color: Colors.black, 
+                          size: 24.0, 
+                       ),
+                          ),
+                      Expanded(
+                      child: ListTile(
+                       title: Text('App Settings',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                       trailing: IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,size: 20,
+                              color: Colors.black, 
+                            ),
+                            onPressed: () {
+                      //        Navigator.of(context).push(
+                      // MaterialPageRoute(
+                      //   builder: (context) => OrdersPage(),
+                     // ),
+                   // );
+                            },
+                          ),
+                      ),
+                                       ),
+                                       ],
+                                    ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        GestureDetector(onTap:(){ Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => LanguagePage(),
+                      ),
+                    );},
+                          child: Row(
+                           children: [
+                              Padding(
+                               padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                               child: Icon(
+                             Icons.translate_outlined, 
+                             color: Colors.black, 
+                            size: 24.0, 
+                                               ),
+                            ),
+                                              Expanded(
+                                              child: ListTile(
+                                               title: Text('Change Language',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                                               trailing: IconButton(
+                              icon: Icon(
+                                Icons.arrow_forward_ios,size: 20,
+                                color: Colors.black, 
+                              ),
+                              onPressed: () {
+                               Navigator.of(context).push(
+                                              MaterialPageRoute(
+                          builder: (context) => LanguagePage(),
+                                              ),
+                                            );
+                            
+                              },
+                            ),
+                                              ),
+                                         ),
+                                         ],
+                                      ),
+                        ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        Row(
+                         children: [
+                            Padding(
+                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                             child: Icon(
+                           Icons.account_balance_outlined ,
+                           color: Colors.black, 
+                          size: 24.0, 
+                       ),
+                          ),
+                      Expanded(
+                      child: ListTile(
+                       title: Text('Wallet',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                       trailing: IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,size: 20,
+                              color: Colors.black, 
+                            ),
+                            onPressed: () {
+                    //          Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => OrdersPage(),
+                    //   ),
+                    // );
+                            },
+                          ),
+                      ),
+                            ),
+                                       ],
+                                    ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        Row(
+                         children: [
+                            Padding(
+                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                             child: Icon(
+                           Icons.live_help_outlined, 
+                           color: Colors.black, 
+                          size: 24.0, 
+                       ),
+                          ),
+                      Expanded(
+                      child: ListTile(
+                       title: Text('FAQs',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                       trailing: IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,size: 20,
+                              color: Colors.black, 
+                            ),
+                            onPressed: () {
+                    //          Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => OrdersPage(),
+                    //   ),
+                    // );
+                            },
+                          ),
+                      ),
+                                       ),
+                                       ],
+                                    ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                        Row(
+                         children: [
+                            Padding(
+                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                             child: Icon(
+                           Icons.phone_outlined, 
+                           color: Colors.black, 
+                          size: 24.0, 
+                       ),
+                          ),
+                      Expanded(
+                      child: ListTile(
+                       title: Text('Need help? Contact Us',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                       trailing:IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,size: 20,
+                              color: Colors.black, 
+                            ),
+                            onPressed: () {
+                    //          Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => OrdersPage(),
+                    //   ),
+                    // );
+                            },
+                          ),
+                      ),
+                                       ),
+                                       ],
+                                    ),
+                                     Opacity(
+                      opacity: 0.1, // 10% opacity
+                                     child: Divider(
+                                      color: Colors.black,
+                      thickness: 1.0,
+                      ),
+                       ),
+                          Row(
+                         children: [
+                            Padding(
+                             padding: const EdgeInsets.only(left: 8.0, right: 2.0),
+                             child: Icon(
+                           Icons.info_outline, 
+                           color: Colors.black, 
+                          size: 24.0, 
+                       ),
+                          ),
+                      Expanded(
+                      child: ListTile(
+                       title: Text('About Us',style: GoogleFonts.laila(fontSize: 17,color: Colors.black),),
+                       trailing:IconButton(
+                            icon: Icon(
+                              Icons.arrow_forward_ios,size: 20,
+                              color: Colors.black, 
+                            ),
+                            onPressed: () {
+                    //          Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => OrdersPage(),
+                    //   ),
+                    // );
+                            },
+                          ),
+                      ),
+                                       ),
+                                       ],
+                                    ),
+                                    
+                                    
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class EditPage extends StatefulWidget {
+  const EditPage({super.key});
+
+  @override
+  State<EditPage> createState() => _EditPageState();
+}
+
+class _EditPageState extends State<EditPage> {
+  TextEditingController nameController = TextEditingController(text: 'Shynaa Sharma');
+  TextEditingController PhoneController = TextEditingController(text: '+1-202-555-0178');
+  TextEditingController emailController = TextEditingController(text: 'shynasharma@gmail.com');
+  TextEditingController primaryAddressController = TextEditingController(text: '567g, 34 Street, Alogoia, Hermenia, US');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      
+      body: Stack(
+        children: [
+          Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Opacity(
+                    opacity: 0.5,
+                    child: Image.asset(
+                      'assets/images/background.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 10.0,
+                left: 16.0,
+                child: Container(
+                  padding: EdgeInsets.only(right: 16.0),
+                  width: 34.0,
+                  height: 34.0,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
+                  ),
+                  child: Positioned(
+                    top: 55.0,
+                    left: 25.0,
+                    child: IconButton(
+            icon: Icon(
+              Icons.logout,
+              size: 24,
+              color: Colors.black,
+            ),
+            onPressed: () {
+                 showModalBottomSheet(context:context,builder:(context){
+                  return Container(
+                      decoration: BoxDecoration( borderRadius:BorderRadius.vertical(top: Radius.circular(70)),),
+              padding: EdgeInsets.all(20.0),
+              height: MediaQuery.of(context).size.height * 0.3,
+             child: ClipRRect(
+           borderRadius: BorderRadius.vertical(top: Radius.circular(70)),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Icon(Icons.keyboard_arrow_down, size: 30),
+              ),
+              SizedBox(height: 20),
+             Center(child: Text('Do you really want to log-out?',style:GoogleFonts.laila(fontSize:16,color:Colors.black))),
+             SizedBox(height:30),
+              Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(right: 16.0),
+                              
+                              //width: 174,
+                              child:ElevatedButton(
+                              onPressed: () {
+                            Navigator.of(context).push(
+                             MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.black),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                      side: BorderSide(color: Colors.black),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                ),
+                child: Text("No",style:GoogleFonts.laila(color: Colors.black)),
+              ),
+                            ),
+                            Container(
+                                margin: EdgeInsets.only(left: 16.0),
+                              // height: 48,
+                              // width: 174,
+                              child: ElevatedButton(
+                              onPressed: () {
+                            Navigator.of(context).push(
+                             MaterialPageRoute(
+                      builder: (context) => SignUp(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                  textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                ),
+                child: Text("Yes"),
+              ),
+                            ),
+                          ],
+                        ),
               
             ],
           ),
         ),
       );
                  });
-              // Handle logout button press here
+              
             },
           ),
                   ),
@@ -679,12 +682,12 @@ class _EditPageState extends State<EditPage> {
                     top: 90,
                     child: Text(
                       'Shynaa Sharma',
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         fontSize: 18,
                       ),
                     ),
                   ),
-                  // "Edit Your Personal Information" text
+                  
                   Positioned(
                     top: 130,
                     left: 10,
@@ -704,7 +707,7 @@ class _EditPageState extends State<EditPage> {
                         ),
                         Text(
                           'Edit Your Personal Information -',
-                          style: TextStyle(
+                          style: GoogleFonts.laila(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
@@ -728,8 +731,8 @@ class _EditPageState extends State<EditPage> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
+                                    labelStyle: GoogleFonts.laila(color: Colors.black),
+                                    hintStyle: GoogleFonts.laila(color: Colors.black),
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.black),
                                     ),
@@ -764,7 +767,7 @@ class _EditPageState extends State<EditPage> {
                             margin: EdgeInsets.only(top: 5.0),
                             child: Text(
                               'Your Name',
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 fontSize: 10,
                                 color: Colors.grey,
                               ),
@@ -780,8 +783,8 @@ class _EditPageState extends State<EditPage> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
+                                    labelStyle: GoogleFonts.laila(color: Colors.black),
+                                    hintStyle: GoogleFonts.laila(color: Colors.black),
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.black),
                                     ),
@@ -816,7 +819,7 @@ class _EditPageState extends State<EditPage> {
                             margin: EdgeInsets.only(top: 5.0),
                             child: Text(
                               'Phone Number',
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 fontSize: 10,
                                 color: Colors.grey,
                               ),
@@ -832,8 +835,8 @@ class _EditPageState extends State<EditPage> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
+                                    labelStyle: GoogleFonts.laila(color: Colors.black),
+                                    hintStyle: GoogleFonts.laila(color: Colors.black),
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.black),
                                     ),
@@ -868,7 +871,7 @@ class _EditPageState extends State<EditPage> {
                             margin: EdgeInsets.only(top: 5.0),
                             child: Text(
                               'Email Address',
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 fontSize: 10,
                                 color: Colors.grey,
                               ),
@@ -884,8 +887,8 @@ class _EditPageState extends State<EditPage> {
                                     focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.grey),
                                     ),
-                                    labelStyle: TextStyle(color: Colors.black),
-                                    hintStyle: TextStyle(color: Colors.black),
+                                    labelStyle: GoogleFonts.laila(color: Colors.black),
+                                    hintStyle: GoogleFonts.laila(color: Colors.black),
                                     enabledBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(color: Colors.black),
                                     ),
@@ -920,7 +923,7 @@ class _EditPageState extends State<EditPage> {
                             margin: EdgeInsets.only(top: 5.0),
                             child: Text(
                               'Primary Address',
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 fontSize: 10,
                                 color: Colors.grey,
                               ),
@@ -944,14 +947,14 @@ class _EditPageState extends State<EditPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                    textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.black),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0),
                         side: BorderSide(color: Colors.black),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   ),
-                  child: Text("Discard",style:TextStyle(color: Colors.black)),
+                  child: Text("Discard",style:GoogleFonts.laila(color: Colors.black)),
                 ),
                               ),
                               Container(
@@ -968,7 +971,7 @@ class _EditPageState extends State<EditPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
+                    textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(0),
                     ),
@@ -1007,7 +1010,7 @@ class Order {
   final double totalPrice;
   final String storeName;
   final String orderStatus;
-  final Color orderStatusColor; // Add order status color
+  final Color orderStatusColor; 
 
   Order({
     required this.imageUrl,
@@ -1015,7 +1018,7 @@ class Order {
     required this.totalPrice,
     required this.storeName,
     required this.orderStatus,
-    required this.orderStatusColor, // Add order status color
+    required this.orderStatusColor, 
   });
 }
 
@@ -1028,7 +1031,7 @@ List<Order> orders = [
     totalPrice: 199.0,
     storeName: 'Circle Bloom',
     orderStatus: 'Delivered',
-    orderStatusColor: Color(0xff0F9D58), // Green color for Delivered
+    orderStatusColor: Color(0xff0F9D58), 
   ),
   Order(
       imageUrl: 'assets/images/prod1.png',
@@ -1036,7 +1039,7 @@ List<Order> orders = [
     totalPrice: 149.0,
     storeName: 'Example Store',
     orderStatus: 'Cancelled',
-    orderStatusColor: Color(0xffAA5656), // Red color for Cancelled
+    orderStatusColor: Color(0xffAA5656), 
   ),
   Order(
       imageUrl: 'assets/images/prod1.png',
@@ -1044,7 +1047,7 @@ List<Order> orders = [
     totalPrice: 299.0,
     storeName: 'Another Store',
     orderStatus: 'Received',
-    orderStatusColor: Colors.yellow, // Yellow color for Received
+    orderStatusColor: Colors.yellow, 
   ),
 ];
 
@@ -1064,7 +1067,7 @@ Widget build(BuildContext context) {
       ),
       title: Text(
         'Your Orders',
-        style: TextStyle(fontSize: 20, color: Colors.black),
+        style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
       ),
     ),
    body: ListView.builder(
@@ -1079,11 +1082,11 @@ Widget build(BuildContext context) {
             children: [
               Stack(
                 children: [
-                  Image.network(
+                  Image.asset(
                     height: 100,
                     width: 90,
                     order.imageUrl,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                   Positioned(
                     top: -5,
@@ -1121,7 +1124,7 @@ Widget build(BuildContext context) {
                           children: <TextSpan>[
                             TextSpan(
                               text: order.orderStatus + ' ',
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 color: order.orderStatusColor,
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -1129,7 +1132,7 @@ Widget build(BuildContext context) {
                             ),
                             TextSpan(
                               text: order.deliveryDate,
-                              style: TextStyle(
+                              style: GoogleFonts.laila(
                                 color: Colors.black,
                                 fontSize: 13,
                               ),
@@ -1146,7 +1149,7 @@ Widget build(BuildContext context) {
                 },
                         child: Text(
                           'Track Order',
-                          style: TextStyle(
+                          style: GoogleFonts.laila(
                             color: Color(0xffAA5656),
                             decoration: TextDecoration.underline,
                             fontWeight: FontWeight.bold,
@@ -1160,7 +1163,7 @@ Widget build(BuildContext context) {
                     children: [
                       Text(
                         '\$${order.totalPrice}',
-                        style: TextStyle(
+                        style: GoogleFonts.laila(
                           color: Colors.black,
                           fontSize: 17,
                         ),
@@ -1172,7 +1175,7 @@ Widget build(BuildContext context) {
                     children: [
                       Text(
                         order.storeName,
-                        style: TextStyle(
+                        style: GoogleFonts.laila(
                           color: Colors.black,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -1240,6 +1243,8 @@ class _LanguagePageState extends State<LanguagePage> {
     'Japanese',
   ];
 
+  String selectedLanguage = 'English'; // Default selected language
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1256,89 +1261,90 @@ class _LanguagePageState extends State<LanguagePage> {
         ),
         title: Text(
           'Choose Your Language',
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
-          Column(
-            children: [
-              buildSearchBar(),
-              SizedBox(height: 20), 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.black,
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      'English',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ],
+          buildSearchBar(),
+          SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.black,
                 ),
-              ),
-              SizedBox(height: 20),
-              Opacity(
-                opacity: 0.3, // 10% opacity
-                child: Divider(
-                  color: Colors.grey,
-                  thickness: 10.0,
+                SizedBox(width: 10),
+                Text(
+                  selectedLanguage,
+                  style: GoogleFonts.laila(fontSize: 18),
                 ),
-              ),
-              Container(
-                height: 550,
-                child: ListView.builder(
-                  itemCount: languages.length,
-                  itemBuilder: (context, index) {
-                    final language = languages[index];
-                    return ListTile(
-                      leading: Icon(Icons.circle_outlined, size: 20),
-                      minLeadingWidth: 5,
-                      title: Text(language),
-                      onTap: () {
-                       
-                      },
-                    );
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          Opacity(
+            opacity: 0.3, // 10% opacity
+            child: Divider(
+              color: Colors.grey,
+              thickness: 10.0,
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: languages.length,
+              itemBuilder: (context, index) {
+                final language = languages[index];
+                return ListTile(
+                  leading: selectedLanguage == language
+                      ? Icon(Icons.check_circle, size: 20)
+                      : Icon(Icons.circle_outlined, size: 20),
+                  minLeadingWidth: 5,
+                  title: Text(language),
+                  onTap: () {
+                    setState(() {
+                      selectedLanguage = language;
+                    });
                   },
+                );
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          // Save button
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
                 ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              primary: Colors.black,
+              textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(0),
               ),
-              SizedBox(height: 20),
-              // Save button
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.black,
-                  textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
-                ),
-                child: Text("Save"),
-              ),
-            ],
+              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+            ),
+            child: Text("Save"),
           ),
         ],
       ),
     );
-  }}
+  }
+}
+
 Widget buildSearchBar() {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: TextField(
       decoration: InputDecoration(
         hintText: "Search Language",
-        hintStyle: TextStyle(fontSize: 18),
+        hintStyle: GoogleFonts.laila(fontSize: 18),
       
         suffixIcon: Icon(Icons.mic, size: 24, color: Colors.black),
         border: OutlineInputBorder(
@@ -1381,7 +1387,7 @@ class _TrackOrderState extends State<TrackOrder> {
         ),
         title: Text(
           'Track Your Order',
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
         ),
       ),
       body: Column(
@@ -1403,7 +1409,7 @@ class _TrackOrderState extends State<TrackOrder> {
                     color: Colors.yellow,
                   ),
                   SizedBox(width: 10),
-                  Text("Order received on Jan 2023",style: TextStyle(fontSize: 20),),
+                  Text("Order received on Jan 2023",style: GoogleFonts.laila(fontSize: 20),),
                 ],
               ),
               SizedBox(height: 20), 
@@ -1439,7 +1445,7 @@ class _TrackOrderState extends State<TrackOrder> {
                     color: Colors.blue,
                   ),
                   SizedBox(width: 10),
-                  Text("Order is on your way",style: TextStyle(fontSize: 16),),
+                  Text("Order is on your way",style: GoogleFonts.laila(fontSize: 16),),
                 ],
               ),
               SizedBox(height: 10), 

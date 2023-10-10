@@ -1,9 +1,12 @@
+import 'package:flower_store/UI/bestsellin.dart';
 import 'package:flower_store/UI/checkout.dart';
 import 'package:flower_store/UI/occassion.dart';
 import 'package:flower_store/UI/productDetail.dart';
 import 'package:flower_store/UI/profilscreen.dart';
+import 'package:flower_store/UI/recommended.dart';
 import 'package:flower_store/UI/searchScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -26,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     const ProfileScreen(),
   ];
 
-  late VideoPlayerController _controller;
+ 
   List<String> bestSellingProductImages = [
   'assets/images/flower1.png',
    'assets/images/flower2.png',
@@ -46,180 +49,193 @@ List<String> recommendedProductImages = [
 
 
   @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.asset(
-      'assets/images/cat.mp4',
-    )..initialize().then((_) {
-      setState(() {});
-      _controller.play();
-    });
-  }
+ 
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
- Widget build(BuildContext context) {
+Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: Colors.white,
-    body: Column(
-      children: [
-           if (pageIndex == 0)
-       if (showVideo)
-    Padding(
-    padding: const EdgeInsets.all(5.0),
-    child: SingleChildScrollView(
-      child: Stack(
-        alignment: Alignment.center,
+    body: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
         children: [
-          Container(
-           height: MediaQuery.of(context).size.height*0.089,
-          width:MediaQuery.of(context).size.width,
-          margin: EdgeInsets.fromLTRB(05, 25, 5, 8),
-            child: ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: VideoPlayer(_controller),
-      ),),
-          
-          Positioned(
-            child: Center(
-              child: GestureDetector(
-                onTap :(){Navigator.of(context).push(MaterialPageRoute(
-                       builder: (context) => CatalogueProducts(),
-                  ));} ,
+          if (pageIndex == 0)
+            if (showVideo)
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.089,
+                    width: MediaQuery.of(context).size.width,
+                    margin: EdgeInsets.fromLTRB(5, 25, 5, 8),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(0.6),
+                        BlendMode.srcATop,
+                      ),
+                      child: Transform.scale(
+                        scale: 1.5,
+                        child: Image.asset(
+                          'assets/images/catalogue.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => CatalogueProducts(),
+                          ));
+                        },
+                        child: Text(
+                          "Catalogue",
+                          style: GoogleFonts.laila(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+      
+          if (pageIndex == 0)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  "Catalogue",
-                  style: TextStyle(
-                    color: Colors.white,
+                  "By Occasion",
+                  style: GoogleFonts.laila(
+                    color: Colors.black,
                     fontSize: 22,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
             ),
+          if (pageIndex == 0) buildImageCarousel(),
+          SizedBox(height: 20),
+          if (pageIndex == 0) buildSearchBar(context),
+      
+          if (pageIndex == 0)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Best Selling Products",
+                      style: GoogleFonts.laila(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BestSelling(),
+                          ),
+                        );
+                      },
+                   
+                      child: Text(
+                        "View all",
+                        style: GoogleFonts.laila(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+          if (pageIndex == 0)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: bestSellingProductImages.map((imagePath) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: buildProductCard(
+                      imagePath,
+      
+                      'Rose Bouquet',
+                      '\$25.99',
+                      cardWidth: 135,
+                      cardHeight: 140,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          if (pageIndex == 0)
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recommended Products",
+                      style: GoogleFonts.laila(
+                        color: Colors.black,
+                        fontSize: 20,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => RecommendedScreen(),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "View all",
+                        style: GoogleFonts.laila(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          // SizedBox(height: 8),
+          if (pageIndex == 0)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: recommendedProductImages.map((imagePath) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 8.0),
+                    child: buildProductCard(
+                      imagePath,
+                      'Rose Bouquet',
+                      '\$25.99',
+                      cardWidth: 135,
+                      cardHeight: 140,
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          Expanded(
+            child: pages[pageIndex],
           ),
         ],
       ),
-    ),
-    ),
-    
-      //  SizedBox(height: 5),
-        if (pageIndex == 0)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                "By Occasion",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 22,
-                ),
-              ),
-            ),
-          ),
-        if (pageIndex == 0) buildImageCarousel(),
-        if (pageIndex == 0) buildSearchBar(),
-    
-        if (pageIndex == 0)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Best Selling Products",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                    ),
-                  ),
-                  Text(
-                    "View all",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        SizedBox(height: 8),
-        if (pageIndex == 0)
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: bestSellingProductImages.map((imagePath) {
-                return Padding(
-                  padding: EdgeInsets.only(right: 8.0),
-                  child: buildProductCard(
-                    imagePath,
-    
-                    'Rose Bouquet',
-                    '\$25.99',
-                     cardWidth: 135,
-                    cardHeight: 170,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        if (pageIndex == 0)
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Recommended Products",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                    ),
-                  ),
-                  Text(
-                    "View all",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),  
-        SizedBox(height: 8),
-          if (pageIndex == 0)
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: recommendedProductImages.map((imagePath) {
-              return Padding(
-                padding: EdgeInsets.only(right: 8.0),
-                child: buildProductCard(
-                  imagePath,
-                   'Rose Bouquet',
-                  '\$25.99',
-                  cardWidth: 135,
-                  cardHeight: 150,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        Expanded(
-          child: pages[pageIndex],
-        ),
-      ],
     ),
     bottomNavigationBar: buildMyNavBar(context),
   );
@@ -286,7 +302,7 @@ List<String> recommendedProductImages = [
                 SizedBox(height: 5),
                 Text(
                   title,
-                  style: TextStyle(
+                  style: GoogleFonts.laila(
                     color: Colors.black,
                     fontSize: 10,
                   ),
@@ -319,7 +335,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
               onTap:(){
                 Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ProductDetail(title: '', address: '', deliveryDate: '', shippingCharges:9.9, description: '', includedItems: '', dummyEmail: '', dummyPhone: '', dummyReviews: '',),
+                        builder: (context) => ProductDetail(id: ''),
                       ),
                     );
               },
@@ -351,14 +367,14 @@ Widget buildProductCard(String imagePath, String productName, String productPric
                   children: [
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       productPrice,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
@@ -377,32 +393,52 @@ Widget buildProductCard(String imagePath, String productName, String productPric
  Widget buildSearchBar() {
   return GestureDetector(
     onTap:(){
-      //  Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => SearchScreen(),
-      //   ),
-      // );
+       Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SearchScreen(),
+        ),
+      );
     },
     child: Padding(
       padding: const EdgeInsets.all(8.0),
-      child: TextField(
-        decoration: InputDecoration(
-          hintText: "Search",
-          hintStyle: TextStyle(fontSize: 18),
-          prefixIcon: Icon(Icons.tune, size: 24, color: Colors.black),
-          suffixIcon: Icon(Icons.mic, size: 24, color: Colors.black),
-          border: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: Color(0xffF5EBE0),
+        ),
+        child: Row(
+          children: [
+            GestureDetector(onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SearchScreen(),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide.none,
-            borderRadius: BorderRadius.circular(8.0),
+        );
+      },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(Icons.tune, size: 24, color: Colors.black),
+              ),
+            ),
+            Expanded(
+              child: GestureDetector(onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SearchScreen(),
           ),
-          filled: true,
-          
-          fillColor: Color(0xffF5EBE0), 
-          contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        );
+      },
+                child: Text(
+                  "Search",
+                  style: GoogleFonts.laila(fontSize: 18),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Icon(Icons.mic, size: 24, color: Colors.black),
+            ),
+          ],
         ),
       ),
     ),
@@ -410,10 +446,9 @@ Widget buildProductCard(String imagePath, String productName, String productPric
 }
 
 
-
   Container buildMyNavBar(BuildContext context) {
     return Container(
-      height: 50,
+      height: 35,
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
       ),
@@ -431,7 +466,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
             icon: Icon(
               Icons.home_outlined,
               color: const Color(0xFFAA8B56),
-              size: 35,
+              size: 25,
             ),
           ),
           IconButton(
@@ -445,7 +480,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
             icon: Icon(
               Icons.favorite_border,
               color: const Color(0xFFAA8B56),
-              size: 35,
+              size: 25,
             ),
           ),
           IconButton(
@@ -458,7 +493,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
             icon: Icon(
               Icons.shopping_bag_outlined,
               color: const Color(0xFFAA8B56),
-              size: 35,
+              size: 25,
             ),
           ),
           IconButton(
@@ -471,7 +506,7 @@ Widget buildProductCard(String imagePath, String productName, String productPric
             icon: Icon(
               Icons.person_outline,
               color: const Color(0xFFAA8B56),
-              size: 35,
+              size: 25,
             ),
           ),
         ],
@@ -528,7 +563,7 @@ class _Page2State extends State<Page2> {
         ),
         title: Text(
           'Liked Products',
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
         ),
       ),
       body: ListView.builder(
@@ -625,14 +660,14 @@ Widget LikedProductList(String imagePath, String productName, String productPric
                   children: [
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       productPrice,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
@@ -683,7 +718,7 @@ class _CatalogueProductsState extends State<CatalogueProducts> {
         ),
         title: Text(
           'Our Catalogue',
-          style: TextStyle(fontSize: 20, color: Colors.black),
+          style: GoogleFonts.laila(fontSize: 20, color: Colors.black),
         ),
       ),
       body: ListView.builder(
@@ -779,14 +814,14 @@ Widget CatalogueProductList(String imagePath, String productName, String product
                   children: [
                     Text(
                       productName,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
                     ),
                     Text(
                       productPrice,
-                      style: TextStyle(
+                      style: GoogleFonts.laila(
                         color: Colors.white,
                         fontSize: 12,
                       ),
@@ -801,7 +836,3 @@ Widget CatalogueProductList(String imagePath, String productName, String product
     ),
   );
 }
-
-
-
-

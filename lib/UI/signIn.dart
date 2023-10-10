@@ -1,8 +1,13 @@
-import 'dart:async';
 
+import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+// import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flower_store/UI/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key});
@@ -12,164 +17,247 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  late VideoPlayerController _controller;
-  bool _visible = true;
+  final _formKey=GlobalKey<FormState>();
+  final emailController =TextEditingController();
+  final passwordController =TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.asset('assets/images/loginvideo.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
+  FirebaseAuth _auth =FirebaseAuth.instance;
+   @override
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+      }
+
+ void login() async {
+  try {
+    await _auth.signInWithEmailAndPassword(
+        email: emailController.text.toString(),
+        password: passwordController.text.toString());
+
+   
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+    );
+  } catch (e) {
+    
+    Fluttertoast.showToast(
+      msg: "Sign-in failed. Please check your credentials.",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+    );
   }
+}
 
-  @override
+ 
+@override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _getVideoBackground(),
-            _getBackgroundColor(),
-            _getContent(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              _getImageBackground(),
+              _getBackgroundColor(),
+              _getContent(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  Widget _getVideoBackground() {
+ 
+Widget _getImageBackground() {
+  return Positioned.fill(
+    child: AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Transform.scale(
+        scale: 1.5,
+        child: Opacity(
+          opacity: 0.65,
+          child: Image.asset(
+            'assets/images/sign.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+ Widget _getBackgroundColor() {
     return Positioned.fill(
-      child: AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: Transform.scale(
-          scale: 1.2,
-          child: VideoPlayer(_controller),
-        ),
+      child: Container(
+          height: MediaQuery.of(context).size.height*0.1,
+        color: Color.fromRGBO(245, 235, 224, 0.65),
       ),
-    );
-  }
-
-  Widget _getBackgroundColor() {
-    return Container(
-      color: Color.fromRGBO(245, 235, 224, 0.65),
     );
   }
 
   Widget _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 100.0,
-        ),
-        Center(
-          child: Text(
-            "Sign In",
-            style: TextStyle(color: Colors.black, fontSize: 30),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 100.0,
           ),
-        ),
-        SizedBox(height: 80),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Enter email",
-                  labelText: "Email-id",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-              SizedBox(height: 25),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "Enter password",
-                  labelText: "Password",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(top: 300.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => NameDetails(),
+          Center(
+            child: Text(
+              "Sign In",
+              style: GoogleFonts.laila(
+               fontSize: 30,
+             fontWeight: FontWeight.w300,
+    //           // fontStyle: FontStyle.italic,
+             color: Colors.black),
+                 
+    //          
+            ),
+          ),
+          SizedBox(height: 80),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Form(
+                key: _formKey,
+             
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                                        validator: (value){
+                      if(value!.isEmpty){
+                        return 'Enter email';
+                      }return null;
+                    },
+                     keyboardType: TextInputType.emailAddress,
+                    controller: emailController ,
+                    decoration: InputDecoration(
+                      hintText: "Enter email",
+                      labelText: "Email-id",
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
                       ),
-                    );
+                      labelStyle: GoogleFonts.laila(
+                             fontSize: 16,
+                             fontWeight: FontWeight.w400,
+                //                         // fontStyle: FontStyle.italic,
+                              color: Colors.black),
+                      hintStyle:GoogleFonts.laila(
+                                  fontSize: 12,
+                                 fontWeight: FontWeight.w400,
+                       
+                             color: Colors.black),
+                //                  
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 25),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                  controller: passwordController,
+                  validator: (value){
+                    if(value!.isEmpty){
+                      return 'Enter password';
+                    }
+                    return null;
                   },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: Text("Next"),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SignUp(),
-                  ));
-                },
-                child: Text.rich(
-                  TextSpan(
-                    text: "Don't have an account? ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Sign up",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "Enter password",
+                      labelText: "Password",
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
                       ),
-                    ],
+                                       labelStyle: GoogleFonts.laila(
+                             fontSize: 16,
+                             fontWeight: FontWeight.w400,
+                                //                         // fontStyle: FontStyle.italic,
+                              color: Colors.black),
+                      hintStyle:GoogleFonts.laila(
+                                  fontSize: 12,
+                                 fontWeight: FontWeight.w400,
+                       
+                             color: Colors.black),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
                   ),
-                ),
+                 // SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 330.0),
+                    child: Container(
+                      margin: EdgeInsets.only(top:1.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if(_formKey.currentState!.validate()){
+                            login();
+                          }
+                          // Navigator.of(context).push(
+                          //   MaterialPageRoute(
+                          //     builder: (context) => NameDetails(),
+                          //   ),
+                         // );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.black,
+                          textStyle: GoogleFonts.laila(
+                             fontSize: 17,
+                              fontWeight: FontWeight.w600,
+                                          color: Colors.white),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0),
+                          ),
+                          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        ),
+                        child: Text("Next"),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignUp(),
+                      ));
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Don't have an account? ",
+                        style: GoogleFonts.laila(
+                             fontSize: 16,
+                             fontWeight: FontWeight.w700,
+                       
+                               color: Colors.black),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "Sign up",
+                            style:GoogleFonts.laila(
+                             fontSize: 16,
+                             fontWeight: FontWeight.w700,
+                       
+                               color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
+
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key});
@@ -179,176 +267,268 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  late VideoPlayerController _controller;
-  bool _visible = true;
+  final _formKey=GlobalKey<FormState>();
+  final emailController =TextEditingController();
+  final passwordController =TextEditingController();
+ 
+
+  FirebaseAuth _auth =FirebaseAuth.instance;
+   bool _isPasswordVisible=false;
 
   @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.asset('assets/images/loginvideo.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
-  }
+  void dispose(){
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+      }
+ 
 
   @override
+
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _getVideoBackground(),
-            _getBackgroundColor(),
-            _getContent(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              _getImageBackground(),
+                _getBackgroundColor(),
+              _getContent(),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
-
-  Widget _getVideoBackground() {
+Widget _getImageBackground() {
+  return Positioned.fill(
+    child: AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Transform.scale(
+        scale: 1.5,
+        child: Opacity(
+          opacity: 0.65,
+          child: Image.asset(
+            'assets/images/sign.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+Widget _getBackgroundColor() {
     return Positioned.fill(
-      child: AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: Transform.scale(
-          scale: 1.2,
-          child: VideoPlayer(_controller),
-        ),
+      child: Container(
+          height: MediaQuery.of(context).size.height*0.1,
+        color: Color.fromRGBO(245, 235, 224, 0.65),
       ),
-    );
-  }
-
-  Widget _getBackgroundColor() {
-    return Container(
-      color: Color.fromRGBO(245, 235, 224, 0.65),
     );
   }
 
   Widget _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 80.0,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+           SizedBox(
+          height: 100.0,
         ),
-        Center(
-          child: Text(
-            "Sign Up",
-            style: TextStyle(color: Colors.black, fontSize: 30),
+          Center(
+            child: Text(
+              "Sign Up",
+             style: GoogleFonts.laila(
+             fontSize: 30,
+           fontWeight: FontWeight.w300,
+//           // fontStyle: FontStyle.italic,
+           color: Colors.black),
+               
+//          
           ),
         ),
         SizedBox(height: 80),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Enter email",
-                  labelText: "Email-id",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    keyboardType: TextInputType.emailAddress,
+                    controller: emailController ,
+                    decoration: InputDecoration(
+                      hintText: "Enter email",
+                      labelText: "Email-id",
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                       
+                    labelStyle: GoogleFonts.laila(
+                           fontSize: 16,
+                           fontWeight: FontWeight.w400,
+            //                         // fontStyle: FontStyle.italic,
+                            color: Colors.black),
+                    hintStyle:GoogleFonts.laila(
+                                fontSize: 12,
+                               fontWeight: FontWeight.w400,
+                     
+                           color: Colors.black),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    validator: (value){
+                      if(value!.isEmpty){
+                        return 'Enter email';
+                      }return null;
+                    },
                   ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
+                  SizedBox(height: 25),
+                  TextFormField(
+            keyboardType: TextInputType.text,
+            controller: passwordController,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Enter password';
+              } else if (value.length < 6) {
+                return 'Password must be at least 6 characters';
+              }
+              return null;
+            },
+            obscureText: !_isPasswordVisible,
+            decoration: InputDecoration(
+              labelText: "Create a Strong Password",
+              hintText: "Enter Password",
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              labelStyle: GoogleFonts.laila(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+              hintStyle: GoogleFonts.laila(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+                child: Icon(
+                  _isPasswordVisible
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: Colors.black,
                 ),
               ),
-              SizedBox(height: 25),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Create a Strong Password",
-                  hintText: "Enter Password",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
+            ),
+          ),
+          SizedBox(height: 15),
+          TextFormField(
+            obscureText: !_isPasswordVisible,
+            decoration: InputDecoration(
+              labelText: "Confirm Password",
+              hintText: "Re-enter Password",
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
               ),
-              SizedBox(height: 15),
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Confirm Password",
-                  hintText: "Re-enter Password",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
+              labelStyle: GoogleFonts.laila(
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
               ),
-              SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.only(top: 280.0),
-                child: ElevatedButton(
-                  onPressed: () {
+              hintStyle: GoogleFonts.laila(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.black),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 255.0),
+            child: Container(margin: EdgeInsets.only(top:1.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _auth.createUserWithEmailAndPassword(
+                      email: emailController.text.toString(),
+                      password: passwordController.text.toString(),
+                    ).catchError((error) {
+                      if (error is FirebaseAuthException) {
+                        if (error.code == 'email-already-in-use') {
+                          Fluttertoast.showToast(
+                            msg: "Email is already in use. Please use a different email.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                          );
+                        }
+                      }
+                    });
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => _OTPScreen(),
                       ),
                     );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: Text("Get OTP"),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SignIn(),
-                  ));
+                  }
                 },
-                child: Text.rich(
-                  TextSpan(
-                    text: "Already have an account? ",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: "Sign In",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black,
+                  textStyle: TextStyle(fontSize: 20, color: Colors.black),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0),
                   ),
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                 ),
+                child: Text("Get OTP"),
               ),
-            ],
+            ),
           ),
-        ),
-      ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => SignIn(),
+                      ));
+                    },
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Already have an account? ",
+                        style: GoogleFonts.laila(
+                         fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                       color: Colors.black),
+                     
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: "Sign In",
+                            style: GoogleFonts.laila(
+                         fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                                      color: Colors.black),
+                     
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -364,18 +544,13 @@ class __OTPScreenState extends State<_OTPScreen> {
   late int secondsLeft;
   late Stream<int> timerStream;
   late StreamSubscription<int> timerSubscription;
-  late VideoPlayerController _controller;
+ 
   bool _visible = true;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/images/loginvideo.mp4')
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
+    
     secondsLeft = 59;
     timerStream = Stream.periodic(Duration(seconds: 1), (count) => secondsLeft - count)
         .takeWhile((remainingTime) => remainingTime >= 0);
@@ -392,138 +567,162 @@ class __OTPScreenState extends State<_OTPScreen> {
     super.dispose();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _getVideoBackground(),
-            _getBackgroundColor(),
-            _getContent(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _getVideoBackground() {
-    return Positioned.fill(
-      child: AspectRatio(
-        aspectRatio: _controller.value.aspectRatio,
-        child: Transform.scale(
-          scale: 1.2,
-          child: VideoPlayer(_controller),
-        ),
-      ),
-    );
-  }
-
-  Widget _getBackgroundColor() {
-    return Container(
-      color: Color.fromRGBO(245, 235, 224, 0.65),
-    );
-  }
-
-  Widget _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 100.0,
-        ),
-        AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => SignUp()),
-              );
-            },
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        Center(
-          child: Text(
-            "Verify email-id",
-            style: TextStyle(color: Colors.black, fontSize: 30),
-          ),
-        ),
-        SizedBox(height: 90),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
+      body: SingleChildScrollView(
+        child: Center(
+          child: Stack(
             children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Enter OTP",
-                  labelText: "OTP",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Text(
-                  '00:${secondsLeft.toString().padLeft(2, '0')} secs left',
-                  style: TextStyle(color: Colors.red, fontSize: 16),
-                ),
-              ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(top: 250.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => NameDetails(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: Text("Next"),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  // Navigate to the sign-up screen
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SignUp(),
-                  ));
-                },
-                child: GestureDetector(
-                  onTap: () {
-                  
-                    // Navigator.of(context).push(MaterialPageRoute(
-                    //   builder: (context) => SignIn(),
-                    // ));
-                  },
-                  child: Text(
-                    'Resend OTP?',
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                ),
-              ),
+               _getImageBackground(),
+              _getBackgroundColor(),
+              _getContent(),
             ],
           ),
         ),
-      ],
+      ),
+    );
+  }
+
+  Widget _getImageBackground() {
+  return Positioned.fill(
+    child: AspectRatio(
+      aspectRatio: 16 / 9,
+      child: Transform.scale(
+        scale: 1.5,
+        child: Opacity(
+          opacity: 0.65,
+          child: Image.asset(
+            'assets/images/sign.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+ Widget _getBackgroundColor() {
+    return Positioned.fill(
+      child: Container(
+          height: MediaQuery.of(context).size.height*0.1,
+        color: Color.fromRGBO(245, 235, 224, 0.65),
+      ),
+    );
+  }
+  Widget _getContent() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 100.0,
+          ),
+          AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios, color: Colors.black,),
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => SignUp()),
+                );
+              },
+            ),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          Center(
+            child: Text(
+              "Verify email-id",
+              style: GoogleFonts.laila(
+           fontSize: 30,
+         fontWeight: FontWeight.w300,
+//           // fontStyle: FontStyle.italic,
+         color: Colors.black,)),
+          ),
+          SizedBox(height:MediaQuery.of(context).size.height*0.18,),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter OTP",
+                    labelText: "OTP",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                   labelStyle: GoogleFonts.laila(
+                       fontSize: 16,
+                       fontWeight: FontWeight.w400,
+//                         // fontStyle: FontStyle.italic,
+                        color: Colors.black),
+                hintStyle:GoogleFonts.laila(
+                            fontSize: 12,
+                           fontWeight: FontWeight.w400,
+       
+                       color: Colors.black),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Text(
+                    '00:${secondsLeft.toString().padLeft(2, '0')} secs left',
+                    style: GoogleFonts.laila(color: Colors.red, fontSize: 16),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(top: 220.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => NameDetails(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      textStyle:  GoogleFonts.laila(
+                     fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    ),
+                    child: Text("Next"),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to the sign-up screen
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => SignUp(),
+                    ));
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                    
+                      // Navigator.of(context).push(MaterialPageRoute(
+                      //   builder: (context) => SignIn(),
+                      // ));
+                    },
+                    child: Text(
+                      'Resend OTP?',
+                      style: GoogleFonts.laila(color: Colors.black, fontSize: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -539,12 +738,14 @@ class _NameDetailsState extends State<NameDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _getPhotoBackground(),
-            _getContent(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              _getPhotoBackground(),
+              _getContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -560,89 +761,93 @@ class _NameDetailsState extends State<NameDetails> {
   }
 
   Widget _getContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        SizedBox(
-          height: 400.0,
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Add Your Name",
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          SizedBox(
+            height: 400.0,
           ),
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "You can change this information in account's settings.",
-              style: TextStyle(color: Colors.black, fontSize: 10),
-            ),
-          ),
-        ),
-        SizedBox(height: 50),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Enter your full name",
-                  labelText: "Full Name",
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.black),
-                  ),
-                ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Add Your Name",
+                style: GoogleFonts.laila(color: Colors.black, fontSize: 30,fontWeight: FontWeight.w300),
               ),
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(top: 120.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddressDetails(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "You can change this information in account's settings.",
+                style: GoogleFonts.laila(color: Colors.black, fontSize: 10,fontWeight: FontWeight.w400),
+              ),
+            ),
+          ),
+          SizedBox(height: 50),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: "Enter your full name",
+                    labelText: "Full Name",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    labelStyle: GoogleFonts.laila(color: Colors.black),
+                    hintStyle: GoogleFonts.laila(color: Colors.black),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
                   ),
-                  child: Text("Next"),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => HomePage(),
-                  ));
-                },
-                child: Text(
-                  'Skip to Shop!',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(top: 100.0),
+                  child: Container(margin: EdgeInsets.only(top:1.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => AddressDetails(),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.black,
+                        textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                      child: Text("Next"),
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => HomePage(),
+                    ));
+                  },
+                  child: Text(
+                    'Skip to Shop!',
+                    style: GoogleFonts.laila(fontSize: 16, color: Colors.black),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -658,12 +863,14 @@ class _AddressDetailsState extends State<AddressDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Stack(
-          children: <Widget>[
-            _getPhotoBackground(),
-            _getContent(),
-          ],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Stack(
+            children: <Widget>[
+              _getPhotoBackground(),
+              _getContent(),
+            ],
+          ),
         ),
       ),
     );
@@ -692,7 +899,7 @@ class _AddressDetailsState extends State<AddressDetails> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Add Your Address",
-              style: TextStyle(color: Colors.black, fontSize: 30),
+              style: GoogleFonts.laila(color: Colors.black, fontSize: 30),
             ),
           ),
         ),
@@ -702,7 +909,7 @@ class _AddressDetailsState extends State<AddressDetails> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "You can change this information in account's settings.",
-              style: TextStyle(color: Colors.black, fontSize: 10),
+              style: GoogleFonts.laila(color: Colors.black, fontSize: 10),
             ),
           ),
         ),
@@ -718,8 +925,8 @@ class _AddressDetailsState extends State<AddressDetails> {
                   focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
                   ),
-                  labelStyle: TextStyle(color: Colors.black),
-                  hintStyle: TextStyle(color: Colors.black),
+                  labelStyle: GoogleFonts.laila(color: Colors.black),
+                  hintStyle: GoogleFonts.laila(color: Colors.black),
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.black),
                   ),
@@ -738,31 +945,33 @@ class _AddressDetailsState extends State<AddressDetails> {
                     SizedBox(width: 8),
                     Text(
                       'Use my Current Location',
-                      style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
+                      style: GoogleFonts.laila(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(top: 90.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => HomePage(),
+                padding: const EdgeInsets.only(top: 70.0),
+                child: Container(margin: EdgeInsets.only(top:1.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => HomePage(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.black,
+                      textStyle: GoogleFonts.laila(fontSize: 20, color: Colors.white),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
                       ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.black,
-                    textStyle: TextStyle(fontSize: 20, color: Colors.white),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(0),
+                      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    child: Text("Let's start blooming!"),
                   ),
-                  child: Text("Let's start blooming!"),
                 ),
               ),
               GestureDetector(
@@ -773,7 +982,7 @@ class _AddressDetailsState extends State<AddressDetails> {
                 },
                 child: Text(
                   'Skip to Shop!',
-                  style: TextStyle(fontSize: 16, color: Colors.black),
+                  style: GoogleFonts.laila(fontSize: 16, color: Colors.black),
                 ),
               ),
             ],

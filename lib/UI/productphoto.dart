@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProductImageViewer extends StatefulWidget {
   final List<String> imagePaths;
@@ -97,7 +98,7 @@ class _ProductImageViewerState extends State<ProductImageViewer> {
 )),
                   child: Text(
                     '${currentIndex + 1}/${widget.imagePaths.length}',
-                    style: TextStyle(fontSize: 18),
+                    style: GoogleFonts.laila(fontSize: 18),
                   ),
                 ),
                  SizedBox(width:10),
